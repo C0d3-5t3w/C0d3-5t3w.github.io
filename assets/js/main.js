@@ -43,6 +43,7 @@ document.addEventListener("DOMContentLoaded", function(){
             window.addEventListener('resize', () => this.init());
             this.lastFrame = 0;
             this.fps = 32; 
+            this.canvas.__particles__ = this.particles; 
             this.animate();
         }
         
@@ -67,7 +68,11 @@ document.addEventListener("DOMContentLoaded", function(){
                 });
             } else {
                 for (let i = 0; i < 100; i++) {
-                    this.particles.push(new Particle(Math.random() * this.canvas.width, Math.random() * this.canvas.height));
+                    const particle = new Particle(
+                        Math.random() * this.canvas.width,
+                        Math.random() * this.canvas.height
+                    );
+                    this.particles.push(particle);
                 }
             }
             
@@ -86,6 +91,12 @@ document.addEventListener("DOMContentLoaded", function(){
                 
                 this.particles.forEach((particle) => {
                     particle.update();
+                    
+                    if (particle.x < 0) particle.x = this.canvas.width;
+                    if (particle.x > this.canvas.width) particle.x = 0;
+                    if (particle.y < 0) particle.y = this.canvas.height;
+                    if (particle.y > this.canvas.height) particle.y = 0;
+                    
                     particle.draw(this.ctx);
                 });
                 

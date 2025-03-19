@@ -3,23 +3,29 @@ document.addEventListener("DOMContentLoaded", function(){
         constructor(x, y) {
             this.x = x;
             this.y = y;
-            this.speed = Math.random() * 2 + 1;
-            this.radius = Math.random() * 3 + 1;
-            this.color = `rgba(251, 42, 255, ${Math.random() * 0.5 + 0.25})`;
+            this.chars = ['5', 'T', '3', 'W'];
+            this.char = this.chars[Math.floor(Math.random() * this.chars.length)];
             this.vx = (Math.random() - 0.5) * 2;
             this.vy = (Math.random() - 0.5) * 2;
+            this.pushForce = { x: 0, y: 0 };
         }
 
         update() {
+            this.vx += this.pushForce.x;
+            this.vy += this.pushForce.y;
             this.x += this.vx;
             this.y += this.vy;
+            
+            this.pushForce.x *= 0.95;
+            this.pushForce.y *= 0.95;
+            this.vx *= 0.99;
+            this.vy *= 0.99;
         }
 
         draw(ctx) {
-            ctx.beginPath();
-            ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-            ctx.fillStyle = this.color;
-            ctx.fill();
+            ctx.font = '15px monospace';
+            ctx.fillStyle = `rgba(251, 42, 255, 0.75)`;
+            ctx.fillText(this.char, this.x, this.y);
         }
     }
 
@@ -58,6 +64,7 @@ document.addEventListener("DOMContentLoaded", function(){
                 const y = Math.random() * this.canvas.height;
                 this.particles.push(new Particle(x, y));
             }
+            this.canvas.__particles__ = this.particles;
         }
 
         animate(timestamp) {
@@ -93,6 +100,8 @@ document.addEventListener("DOMContentLoaded", function(){
             this.animationHandler = this.animate.bind(this);
             this.lastX = 0;
             this.lastY = 0;
+            this.pushRadius = 100;
+            this.pushStrength = 5;
             
             document.addEventListener('mousemove', this.mouseMoveHandler);
             requestAnimationFrame(this.animationHandler);
@@ -127,6 +136,25 @@ document.addEventListener("DOMContentLoaded", function(){
             while (this.points.length > this.maxPoints) {
                 this.points.shift();
             }
+
+            this.pushParticles(x, y);
+        }
+
+        pushParticles(x, y) {
+            const particles = document.querySelector('canvas').__particles__;
+            if (!particles) return;
+
+            particles.forEach(particle => {
+                const dx = particle.x - x;
+                const dy = particle.y - y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                
+                if (distance < this.pushRadius) {
+                    const force = (1 - distance / this.pushRadius) * this.pushStrength;
+                    particle.pushForce.x += (dx / distance) * force;
+                    particle.pushForce.y += (dy / distance) * force;
+                }
+            });
         }
 
         animate() {
