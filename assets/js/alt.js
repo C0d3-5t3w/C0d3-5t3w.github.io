@@ -1,5 +1,29 @@
 document.addEventListener("DOMContentLoaded", function(){
-    class MatrixEffect {
+    class Particle {
+        constructor(x, y) {
+            this.x = x;
+            this.y = y;
+            this.speed = Math.random() * 2 + 1;
+            this.radius = Math.random() * 3 + 1;
+            this.color = `rgba(251, 42, 255, ${Math.random() * 0.5 + 0.25})`;
+            this.vx = (Math.random() - 0.5) * 2;
+            this.vy = (Math.random() - 0.5) * 2;
+        }
+
+        update() {
+            this.x += this.vx;
+            this.y += this.vy;
+        }
+
+        draw(ctx) {
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+            ctx.fillStyle = this.color;
+            ctx.fill();
+        }
+    }
+
+    class ParticleSystem {
         constructor() {
             this.canvas = document.createElement('canvas');
             this.canvas.style.position = 'fixed';
@@ -11,10 +35,8 @@ document.addEventListener("DOMContentLoaded", function(){
             document.body.prepend(this.canvas);
             
             this.ctx = this.canvas.getContext('2d');
-            this.chars = '5T3W'.split(''); 
-            this.drops = [];
-            this.bobPhases = [];
-            this.spawnRates = []; 
+            this.particles = [];
+            this.maxParticles = 100;
             
             this.resizeTimeout = null;
             this.animate = this.animate.bind(this);
@@ -22,68 +44,38 @@ document.addEventListener("DOMContentLoaded", function(){
             this.init();
             window.addEventListener('resize', () => this.init());
             this.lastFrame = 0;
-            this.fps = 32; 
+            this.fps = 60;
             this.animate();
         }
-        
+
         init() {
-            const oldCanvas = this.canvas.cloneNode();
-            const oldWidth = this.canvas.width;
-            const oldHeight = this.canvas.height;
-            
             this.canvas.width = window.innerWidth;
             this.canvas.height = window.innerHeight;
             
-            if (this.drops.length > 0) {
-                const ratio = this.canvas.width / oldWidth;
-                const columns = Math.floor(this.canvas.width / 15);
-                const oldDrops = [...this.drops];
-                this.drops = Array(columns).fill(0);
-                
-                oldDrops.forEach((drop, i) => {
-                    const newIndex = Math.floor(i * ratio);
-                    if (newIndex < columns) {
-                        this.drops[newIndex] = drop;
-                    }
-                });
-            } else {
-                const columns = Math.floor(this.canvas.width / 15);
-                this.drops = Array(columns).fill(1).map(() => this.canvas.height + Math.random() * 50);
-                this.bobPhases = Array(columns).fill(0).map(() => Math.random() * Math.PI * 2);
-                this.spawnRates = Array(columns).fill(0).map(() => Math.random() * 0.3 + 0.5);
-            }
-            
-            if (oldWidth > 0) {
-                this.ctx.drawImage(oldCanvas, 0, 0);
+            this.particles = [];
+            for (let i = 0; i < this.maxParticles; i++) {
+                const x = Math.random() * this.canvas.width;
+                const y = Math.random() * this.canvas.height;
+                this.particles.push(new Particle(x, y));
             }
         }
-        
+
         animate(timestamp) {
             if (!this.lastFrame) this.lastFrame = timestamp;
             const elapsed = timestamp - this.lastFrame;
             
             if (elapsed > (1000 / this.fps)) {
-                this.ctx.fillStyle = 'rgba(0, 0, 0, .05)';
+                this.ctx.fillStyle = 'rgba(0, 0, 0, .1)';
                 this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
                 
-                this.ctx.fillStyle = 'rgba(251, 42, 255, 0.75)'; 
-                this.ctx.font = '15px monospace';
-                
-                this.drops.forEach((drop, i) => {
-                    const text = this.chars[Math.floor(Math.random() * this.chars.length)];
-                    this.bobPhases[i] += 0.03;
-                    const bobOffset = Math.sin(this.bobPhases[i]) * 5;
-                    const x = (i * 15) + bobOffset;
-                    const y = drop;
+                this.particles.forEach(particle => {
+                    particle.update();
+                    particle.draw(this.ctx);
                     
-                    this.ctx.fillText(text, x, y);
-                    
-                    if (y < -20) { 
-                        this.drops[i] = this.canvas.height + (Math.random() * 30);
-                        this.spawnRates[i] = Math.random() * 0.3 + 0.5;
-                    } else {
-                        this.drops[i] = drop - (0.8 * this.spawnRates[i]);
-                    }
+                    if (particle.x < 0) particle.x = this.canvas.width;
+                    if (particle.x > this.canvas.width) particle.x = 0;
+                    if (particle.y < 0) particle.y = this.canvas.height;
+                    if (particle.y > this.canvas.height) particle.y = 0;
                 });
                 
                 this.lastFrame = timestamp;
@@ -212,14 +204,14 @@ document.addEventListener("DOMContentLoaded", function(){
         }
     }
 
-    const matrix = new MatrixEffect();
+    const particles = new ParticleSystem();
     const trail = new Trail();
     const pictureGlow = new PictureGlow();
     
     window.addEventListener('resize', () => {
-        if (matrix.resizeTimeout) {
-            clearTimeout(matrix.resizeTimeout);
+        if (particles.resizeTimeout) {
+            clearTimeout(particles.resizeTimeout);
         }
-        matrix.resizeTimeout = setTimeout(() => matrix.init(), 100);
+        particles.resizeTimeout = setTimeout(() => particles.init(), 100);
     });
 });
