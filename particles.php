@@ -40,7 +40,6 @@
             <h1>
             <a href="index.html" style="color: white;">Home</a>
             </h1>
-            <script src="assets/js/main.js"></script>
         </div>
         <script>
             document.addEventListener('mousemove', (e) => {
