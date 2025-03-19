@@ -80,6 +80,7 @@ jobs:
           
       - name: Compile Sass
         run: |
+          mkdir -p assets/css
           sass assets/sass/main.scss:assets/css/main.css
           sass assets/sass/alt.scss:assets/css/alt.css
           
