@@ -8,11 +8,20 @@ document.addEventListener("DOMContentLoaded", function(){
             this.vx = (Math.random() - 0.5) * 2;
             this.vy = (Math.random() - 0.5) * 2;
             this.pushForce = { x: 0, y: 0 };
+            this.maxSpeed = 3;
+            this.radius = 7.5;
         }
 
         update() {
             this.vx += this.pushForce.x;
             this.vy += this.pushForce.y;
+            
+            const speed = Math.sqrt(this.vx * this.vx + this.vy * this.vy);
+            if (speed > this.maxSpeed) {
+                this.vx = (this.vx / speed) * this.maxSpeed;
+                this.vy = (this.vy / speed) * this.maxSpeed;
+            }
+
             this.x += this.vx;
             this.y += this.vy;
             
@@ -75,6 +84,12 @@ document.addEventListener("DOMContentLoaded", function(){
                 this.ctx.fillStyle = 'rgba(0, 0, 0, .1)';
                 this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
                 
+                for (let i = 0; i < this.particles.length; i++) {
+                    for (let j = i + 1; j < this.particles.length; j++) {
+                        this.checkCollision(this.particles[i], this.particles[j]);
+                    }
+                }
+
                 this.particles.forEach(particle => {
                     particle.update();
                     particle.draw(this.ctx);
@@ -90,6 +105,28 @@ document.addEventListener("DOMContentLoaded", function(){
             
             requestAnimationFrame((ts) => this.animate(ts));
         }
+
+        checkCollision(p1, p2) {
+            const dx = p2.x - p1.x;
+            const dy = p2.y - p1.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+
+            if (distance < p1.radius + p2.radius) {
+                const angle = Math.atan2(dy, dx);
+                const sin = Math.sin(angle);
+                const cos = Math.cos(angle);
+
+                const vx1 = p1.vx * cos + p1.vy * sin;
+                const vy1 = p1.vy * cos - p1.vx * sin;
+                const vx2 = p2.vx * cos + p2.vy * sin;
+                const vy2 = p2.vy * cos - p2.vx * sin;
+
+                p1.vx = vx2 * cos - vy1 * sin;
+                p1.vy = vy1 * cos + vx2 * sin;
+                p2.vx = vx1 * cos - vy2 * sin;
+                p2.vy = vy2 * cos + vx1 * sin;
+            }
+        }
     }
 
     class Trail {
@@ -100,8 +137,8 @@ document.addEventListener("DOMContentLoaded", function(){
             this.animationHandler = this.animate.bind(this);
             this.lastX = 0;
             this.lastY = 0;
-            this.pushRadius = 100;
-            this.pushStrength = 5;
+            this.pushRadius = 80;  
+            this.pushStrength = 2; 
             
             document.addEventListener('mousemove', this.mouseMoveHandler);
             requestAnimationFrame(this.animationHandler);
