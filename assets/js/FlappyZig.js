@@ -732,3 +732,4 @@ class Game {
 }
 
 window.onload = () => new Game();
+// <3

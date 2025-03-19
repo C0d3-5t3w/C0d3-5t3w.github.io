@@ -3,6 +3,7 @@ name: Deploy static content to Pages
 on:
   push:
     branches: ["main"]
+
   workflow_dispatch:
 
 permissions:
@@ -12,7 +13,7 @@ permissions:
 
 concurrency:
   group: "pages"
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   deploy:
@@ -23,74 +24,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      
       - name: Setup Pages
-        uses: actions/configure-pages@v4
-        
-      - name: Setup Go
-        uses: actions/setup-go@v4
-        with:
-          go-version: '1.21'
-          
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.2'
-          
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-          
-      - name: Install Dependencies
-        run: |
-          npm install -g sass
-          composer require staticgen/staticgen
-          
-      - name: Compile Go files
-        if: hashFiles('**/*.go') != ''
-        run: |
-          find . -name "*.go" -type f -exec sh -c '
-            out="${1%.go}"
-            GOOS=js GOARCH=wasm go build -o "$out.wasm" "$1"
-          ' shell {} \;
-          
-      - name: Compile Sass files
-        if: hashFiles('**/*.scss') != '' || hashFiles('**/*.sass') != ''
-        run: |
-          find . -name "*.scss" -o -name "*.sass" | while read file; do
-            sass "$file" "${file%.*}.css"
-          done
-          
-      - name: Compile PHP to static HTML
-        if: hashFiles('**/*.php') != ''
-        run: |
-          find . -name "*.php" -type f -exec php -f {} \; > temp.html
-          while read -r phpfile; do
-            outfile="${phpfile%.php}.html"
-            php -f "$phpfile" > "$outfile"
-          done < <(find . -name "*.php")
-
-      - name: Cache dependencies
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.npm
-            ~/.cache
-            ~/go/pkg/mod
-            ~/.composer/cache
-          key: ${{ runner.os }}-build-${{ hashFiles('**/package-lock.json', '**/go.sum', '**/composer.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-build-
-      
+        uses: actions/configure-pages@v5
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: '.'
-          
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-        with:
-          timeout: 600000
-          artifact_name: "github-pages"
