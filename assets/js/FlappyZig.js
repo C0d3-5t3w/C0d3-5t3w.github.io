@@ -17,7 +17,12 @@ const CONSTANTS = {
     BULLET_AUTO_AIM_RANGE: 800.0,
     BULLET_SPEED_TOTAL: 15.0,
     MAX_HIGH_SCORES: 5,
-    TRAIL_LINE_WIDTH: 8  
+    TRAIL_LINE_WIDTH: 8,
+    SPEED_INCREASE_INTERVAL: 50, 
+    SPEED_INCREASE_FACTOR: 0.15, 
+    MAX_SPEED_MULTIPLIER: 2.5, 
+    BULLET_SIZE_INCREASE: 2, 
+    MAX_BULLET_SIZE: 55 
 };
 
 class Game {
@@ -76,6 +81,8 @@ class Game {
         window.addEventListener('resize', () => this.setupCanvas());
         
         this.lastTime = 0;
+        this.speedMultiplier = 1.0;
+        this.currentBulletSize = CONSTANTS.BULLET_SIZE;
         requestAnimationFrame(this.gameLoop.bind(this));
     }
 
@@ -157,6 +164,8 @@ class Game {
         this.canReset = false;
         this.spawnTimer = 0;
         this.nextEnemyShape = 0;
+        this.speedMultiplier = 1.0;
+        this.currentBulletSize = CONSTANTS.BULLET_SIZE;
     }
 
     shoot() {
@@ -206,6 +215,19 @@ class Game {
         return [found, targetX, targetY];
     }
 
+    calculateDifficultyMultipliers() {
+        const level = Math.floor(this.score / CONSTANTS.SPEED_INCREASE_INTERVAL);
+        this.speedMultiplier = Math.min(
+            1 + (level * CONSTANTS.SPEED_INCREASE_FACTOR),
+            CONSTANTS.MAX_SPEED_MULTIPLIER
+        );
+        
+        this.currentBulletSize = Math.min(
+            CONSTANTS.BULLET_SIZE + (level * CONSTANTS.BULLET_SIZE_INCREASE),
+            CONSTANTS.MAX_BULLET_SIZE
+        );
+    }
+
     update() {
         if (this.gameOver) {
             this.deathTimer++;
@@ -217,6 +239,8 @@ class Game {
             }
             return;
         }
+
+        this.calculateDifficultyMultipliers();
 
         this.colorCycle += 0.05;
         if (this.colorCycle >= Math.PI * 2) this.colorCycle = 0;
@@ -246,7 +270,7 @@ class Game {
         }
 
         this.walls.forEach(wall => {
-            wall.x -= CONSTANTS.WALL_SPEED;
+            wall.x -= CONSTANTS.WALL_SPEED * this.speedMultiplier;
             if (!wall.passed && wall.x + 40 < this.zig.x) {
                 wall.passed = true;
                 this.score++;
@@ -284,7 +308,7 @@ class Game {
         }
 
         this.enemies.forEach(enemy => {
-            enemy.x -= CONSTANTS.ENEMY_SPEED;
+            enemy.x -= CONSTANTS.ENEMY_SPEED * this.speedMultiplier;
             enemy.colorPhase += 0.05;
             enemy.movePhase += CONSTANTS.ENEMY_BOB_SPEED;
             enemy.y = enemy.baseY + Math.sin(enemy.movePhase) * CONSTANTS.ENEMY_BOB_AMPLITUDE;
@@ -316,6 +340,20 @@ class Game {
                 }
                 return true;
             });
+        });
+
+        this.enemies = this.enemies.filter(enemy => {
+            if (this.checkEnemyTrailCollision(enemy)) {
+                this.score += CONSTANTS.ENEMY_POINT_VALUE;
+                return false;
+            }
+            return true;
+        });
+        
+        this.enemies.forEach(enemy => {
+            if (this.checkEnemyCollision(enemy)) {
+                this.gameOver = true;
+            }
         });
     }
 
@@ -430,8 +468,8 @@ class Game {
                 this.meowImg,
                 bullet.x,
                 bullet.y,
-                CONSTANTS.BULLET_SIZE,
-                CONSTANTS.BULLET_SIZE
+                this.currentBulletSize,
+                this.currentBulletSize
             );
             
             this.ctx.restore();
@@ -439,9 +477,9 @@ class Game {
             this.ctx.strokeStyle = `rgb(${r * 255},${g * 255},${b * 255})`;
             this.ctx.beginPath();
             this.ctx.arc(
-                bullet.x + CONSTANTS.BULLET_SIZE/2,
-                bullet.y + CONSTANTS.BULLET_SIZE/2,
-                CONSTANTS.BULLET_SIZE/2,
+                bullet.x + this.currentBulletSize/2,
+                bullet.y + this.currentBulletSize/2,
+                this.currentBulletSize/2,
                 0,
                 Math.PI * 2
             );
@@ -596,8 +634,8 @@ class Game {
     }
 
     checkBulletEnemyCollision(bullet, enemy) {
-        const bulletCenterX = bullet.x + CONSTANTS.BULLET_SIZE/2;
-        const bulletCenterY = bullet.y + CONSTANTS.BULLET_SIZE/2;
+        const bulletCenterX = bullet.x + this.currentBulletSize/2;
+        const bulletCenterY = bullet.y + this.currentBulletSize/2;
         const enemyCenterX = enemy.x + CONSTANTS.ENEMY_SIZE/2;
         const enemyCenterY = enemy.y + CONSTANTS.ENEMY_SIZE/2;
         
@@ -606,7 +644,64 @@ class Game {
             Math.pow(bulletCenterY - enemyCenterY, 2)
         );
         
-        return distance < CONSTANTS.BULLET_SIZE/2 + CONSTANTS.ENEMY_SIZE/2;
+        return distance < this.currentBulletSize/2 + CONSTANTS.ENEMY_SIZE/2;
+    }
+
+    checkEnemyTrailCollision(enemy) {
+        const enemyCenterX = enemy.x + CONSTANTS.ENEMY_SIZE/2;
+        const enemyCenterY = enemy.y + CONSTANTS.ENEMY_SIZE/2;
+        
+        for (let i = 1; i < this.trail.length; i++) {
+            const trailX1 = this.trail[i-1].x + CONSTANTS.ZIG_WIDTH/2;
+            const trailY1 = this.trail[i-1].y + CONSTANTS.ZIG_HEIGHT/2;
+            const trailX2 = this.trail[i].x + CONSTANTS.ZIG_WIDTH/2;
+            const trailY2 = this.trail[i].y + CONSTANTS.ZIG_HEIGHT/2;
+            
+            const distance = this.pointLineDistance(
+                enemyCenterX, 
+                enemyCenterY, 
+                trailX1, 
+                trailY1, 
+                trailX2, 
+                trailY2
+            );
+            
+            if (distance < CONSTANTS.ENEMY_SIZE/2 + CONSTANTS.TRAIL_LINE_WIDTH/2) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    pointLineDistance(x, y, x1, y1, x2, y2) {
+        const A = x - x1;
+        const B = y - y1;
+        const C = x2 - x1;
+        const D = y2 - y1;
+        
+        const dot = A * C + B * D;
+        const lenSq = C * C + D * D;
+        let param = -1;
+        
+        if (lenSq !== 0)
+            param = dot / lenSq;
+        
+        let xx, yy;
+        
+        if (param < 0) {
+            xx = x1;
+            yy = y1;
+        } else if (param > 1) {
+            xx = x2;
+            yy = y2;
+        } else {
+            xx = x1 + param * C;
+            yy = y1 + param * D;
+        }
+        
+        const dx = x - xx;
+        const dy = y - yy;
+        return Math.sqrt(dx * dx + dy * dy);
     }
 
     loadHighScores() {
