@@ -3,7 +3,6 @@ name: Deploy static content to Pages
 on:
   push:
     branches: ["main"]
-
   workflow_dispatch:
 
 permissions:
@@ -24,12 +23,65 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          
+      - name: Install dependencies
+        run: |
+          npm init -y
+          npm install -g sass typescript
+          npm install --save-dev @types/node
+          
+      - name: Create tsconfig.json
+        run: |
+          echo '{
+            "compilerOptions": {
+              "target": "ES2015",
+              "module": "ES2015",
+              "outDir": "assets/js",
+              "rootDir": "assets/ts",
+              "strict": true,
+              "esModuleInterop": true,
+              "skipLibCheck": true,
+              "lib": ["ES2015", "DOM"],
+              "sourceMap": true
+            },
+            "include": ["assets/ts/**/*"],
+            "exclude": ["node_modules"]
+          }' > tsconfig.json
+          
+      - name: Process PHP files
+        run: |
+          find . -name "*.php" -type f -exec sh -c '
+            php "$1" > "${1%.php}.html"
+            rm "$1"
+          ' sh {} \;
+          
+      - name: Compile TypeScript
+        run: |
+          tsc --project tsconfig.json
+          
+      - name: Compile Sass
+        run: |
+          sass assets/sass/main.scss:assets/css/main.css
+          sass assets/sass/alt.scss:assets/css/alt.css
+          
       - name: Setup Pages
         uses: actions/configure-pages@v5
+        
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: '.'
+          
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4

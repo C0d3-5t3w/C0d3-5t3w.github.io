@@ -40,7 +40,7 @@
             </div>            
         </div>
         <h2>
-            <a href="index.html" style="color: white;">Home</a>
+            <a href="index.php" style="color: white;">Home</a>
         </h2>
     </div>
     <script src="assets/js/alt.js"></script>
