@@ -21,6 +21,8 @@
     </head>
     <body>
         <?php
+        header("Cache-Control: no-cache, must-revalidate");
+        header("Expires: Sat, 26 Jul 1997 05:00:00 GMT");
         for($i = 0; $i < 50; $i++) {
             $size = rand(5, 20);
             $x = rand(0, 100);
