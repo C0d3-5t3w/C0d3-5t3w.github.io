@@ -37,26 +37,39 @@ jobs:
       - name: Install dependencies
         run: |
           npm init -y
-          npm install -g sass typescript
-          npm install --save-dev @types/node
+          npm install -g sass
+          npm install --save-dev terser eslint
           
-      - name: Create tsconfig.json
+      - name: Create eslint config
         run: |
           echo '{
-            "compilerOptions": {
-              "target": "ES2015",
-              "module": "ES2015",
-              "outDir": "assets/js",
-              "rootDir": "assets/ts",
-              "strict": true,
-              "esModuleInterop": true,
-              "skipLibCheck": true,
-              "lib": ["ES2015", "DOM"],
-              "sourceMap": true
+            "env": {
+              "browser": true,
+              "es2021": true
             },
-            "include": ["assets/ts/**/*"],
-            "exclude": ["node_modules"]
-          }' > tsconfig.json
+            "extends": "eslint:recommended",
+            "parserOptions": {
+              "ecmaVersion": 2021,
+              "sourceType": "module"
+            }
+          }' > .eslintrc.json
+          
+      - name: Lint JavaScript
+        run: |
+          npx eslint assets/js/*.js --fix || true
+          
+      - name: Minify JavaScript
+        run: |
+          for file in assets/js/*.js; do
+            if [ -f "$file" ]; then
+              npx terser "$file" \
+                --compress \
+                --mangle \
+                --source-map "content='inline',url='$(basename "$file").map'" \
+                --output "${file%.js}.min.js"
+              mv "${file%.js}.min.js" "$file"
+            fi
+          done
           
       - name: Process PHP files
         run: |
@@ -64,10 +77,6 @@ jobs:
             php "$1" > "${1%.php}.html"
             rm "$1"
           ' sh {} \;
-          
-      - name: Compile TypeScript
-        run: |
-          tsc --project tsconfig.json
           
       - name: Compile Sass
         run: |
