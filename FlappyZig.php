@@ -31,7 +31,7 @@
     </style>
 </head>
 <body class="body">
-    <a href="index.php" class="home-link">Home</a>
+    <a href="index.html" class="home-link">Home</a>
     <div class="canvas">
     <script src="assets/js/FlappyZig.js" class="canvas"></script>
     </div>
