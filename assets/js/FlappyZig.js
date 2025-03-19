@@ -1,15 +1,15 @@
 const CONSTANTS = {
     GRAVITY: 0.2,
     JUMP_FORCE: -6.0,
-    WALL_SPEED: 3,
+    WALL_SPEED: 5,
     WALL_SPACING: 800,
-    WALL_GAP: 200,
+    WALL_GAP: 225,
     ZIG_WIDTH: 35,
     ZIG_HEIGHT: 35,
     DEATH_PAUSE: 60,
     BULLET_SIZE: 35,
     ENEMY_SIZE: 35,
-    ENEMY_SPEED: 4,
+    ENEMY_SPEED: 6,
     ENEMY_SPAWN_INTERVAL: 300,
     ENEMY_BOB_AMPLITUDE: 100,
     ENEMY_BOB_SPEED: 0.1,
@@ -87,7 +87,7 @@ class Game {
     }
 
     setupCanvas() {
-        const aspectRatio = 9/7;
+        const aspectRatio = 9/9;
         let width = Math.min(window.innerWidth * 0.95, window.innerHeight * aspectRatio * 0.95);
         let height = width / aspectRatio;
 
