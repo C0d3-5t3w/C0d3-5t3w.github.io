@@ -42,9 +42,20 @@
             </h1>
         </div>
         <script>
+            //document.addEventListener('mousemove', (e) => {
+                //document.querySelectorAll('.particle').forEach(particle => {
+                    //const speed = Math.random() * 2 - 1;
+                    //const x = (e.clientX * speed) / 50;
+                    //const y = (e.clientY * speed) / 50;
+                    //particle.style.transform = `translate(${x}px, ${y}px)`;
+                //});
+            //});
+            document.querySelectorAll('.particle').forEach(particle => {
+                particle.dataset.speed = Math.random() * 2 - 1;
+            });
             document.addEventListener('mousemove', (e) => {
                 document.querySelectorAll('.particle').forEach(particle => {
-                    const speed = Math.random() * 2 - 1;
+                    const speed = parseFloat(particle.dataset.speed);
                     const x = (e.clientX * speed) / 50;
                     const y = (e.clientY * speed) / 50;
                     particle.style.transform = `translate(${x}px, ${y}px)`;
