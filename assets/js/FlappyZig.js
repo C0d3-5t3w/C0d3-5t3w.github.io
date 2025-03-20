@@ -87,7 +87,7 @@ class Game {
     }
 
     setupCanvas() {
-        const aspectRatio = 9/6;
+        const aspectRatio = 2/1;
         let width = Math.min(window.innerWidth * 0.95, window.innerHeight * aspectRatio * 0.95);
         let height = width / aspectRatio;
 
