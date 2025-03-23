@@ -2,7 +2,7 @@ const CONSTANTS = {
     GRAVITY: 0.2,
     JUMP_FORCE: -6.0,
     WALL_SPEED: 5,
-    WALL_SPACING: 800,
+    WALL_SPACING: 900,
     WALL_GAP: 225,
     ZIG_WIDTH: 45,
     ZIG_HEIGHT: 45,
