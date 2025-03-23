@@ -1,7 +1,7 @@
 const CONSTANTS = {
     GRAVITY: 0.2,
     JUMP_FORCE: -6.0,
-    WALL_SPEED: 5,
+    WALL_SPEED: 4,
     WALL_SPACING: 900,
     WALL_GAP: 225,
     ZIG_WIDTH: 45,
@@ -87,7 +87,7 @@ class Game {
     }
 
     setupCanvas() {
-        const aspectRatio = 8/16;
+        const aspectRatio = 6/16;
         let width = Math.min(window.innerWidth * 0.95, window.innerHeight * aspectRatio * 0.95);
         let height = width / aspectRatio;
 
