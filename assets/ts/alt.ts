@@ -54,7 +54,6 @@ document.addEventListener("DOMContentLoaded", function(){
         particles: Particle[];
         maxParticles: number;
         resizeTimeout: number | null;
-        animate: (timestamp: number) => void;
         lastFrame: number;
         fps: number;
 
@@ -73,12 +72,16 @@ document.addEventListener("DOMContentLoaded", function(){
             this.maxParticles = 100;
             
             this.resizeTimeout = null;
-            this.animate = this.animate.bind(this);
-
-            this.init();
-            window.addEventListener('resize', () => this.init());
             this.lastFrame = 0;
             this.fps = 60;
+            
+            this.init();
+            window.addEventListener('resize', () => this.init());
+            (this.canvas as any).__particles__ = this.particles;
+            
+            // Bind the animate method after it's defined
+            this.animate = this.animate.bind(this);
+            // Start animation
             this.animate(0);
         }
 
@@ -289,7 +292,8 @@ document.addEventListener("DOMContentLoaded", function(){
                 updateCanvasSize();
                 window.addEventListener('resize', updateCanvasSize);
 
-                container.addEventListener('mousemove', (e: MouseEvent) => {
+                // Fix the event type casting
+                (container as HTMLElement).addEventListener('mousemove', ((e: MouseEvent) => {
                     const rect = (container as HTMLElement).getBoundingClientRect();
                     const x = e.clientX - rect.left;
                     const y = e.clientY - rect.top;
@@ -307,7 +311,7 @@ document.addEventListener("DOMContentLoaded", function(){
                     
                     ctx.fillStyle = gradient;
                     ctx.fillRect(0, 0, canvas.width, canvas.height);
-                });
+                }) as EventListener);
 
                 container.addEventListener('mouseleave', () => {
                     ctx.clearRect(0, 0, canvas.width, canvas.height);
