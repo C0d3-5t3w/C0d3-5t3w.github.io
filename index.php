@@ -93,7 +93,7 @@ $random_quote = $quotes[array_rand($quotes)];
             </div>
             <div class="quote-of-the-day">
                 <h1>Quote of the Day:</h1>
-                <h2><p><?php echo $random_quote; ?></p></h2>
+                <h3><p><?php echo $random_quote; ?></p></h3>
             </div>
         </div>
         <script src="assets/js/main.js"></script>
