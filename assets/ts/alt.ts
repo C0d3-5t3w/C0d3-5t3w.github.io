@@ -1,6 +1,16 @@
 document.addEventListener("DOMContentLoaded", function(){
     class Particle {
-        constructor(x, y) {
+        x: number;
+        y: number;
+        chars: string[];
+        char: string;
+        vx: number;
+        vy: number;
+        pushForce: { x: number, y: number };
+        maxSpeed: number;
+        radius: number;
+
+        constructor(x: number, y: number) {
             this.x = x;
             this.y = y;
             this.chars = ['5', 'T', '3', 'W'];
@@ -9,10 +19,10 @@ document.addEventListener("DOMContentLoaded", function(){
             this.vy = (Math.random() - 0.5) * 2;
             this.pushForce = { x: 0, y: 0 };
             this.maxSpeed = 3;
-            this.radius = 7.5; 
+            this.radius = 7.5;
         }
 
-        update() {
+        update(): void {
             this.vx += this.pushForce.x;
             this.vy += this.pushForce.y;
             
@@ -21,7 +31,7 @@ document.addEventListener("DOMContentLoaded", function(){
                 this.vx = (this.vx / speed) * this.maxSpeed;
                 this.vy = (this.vy / speed) * this.maxSpeed;
             }
-            
+
             this.x += this.vx;
             this.y += this.vy;
             
@@ -31,7 +41,7 @@ document.addEventListener("DOMContentLoaded", function(){
             this.vy *= 0.99;
         }
 
-        draw(ctx) {
+        draw(ctx: CanvasRenderingContext2D): void {
             ctx.font = '15px monospace';
             ctx.fillStyle = `rgba(251, 42, 255, 0.75)`;
             ctx.fillText(this.char, this.x, this.y);
@@ -39,6 +49,15 @@ document.addEventListener("DOMContentLoaded", function(){
     }
 
     class ParticleSystem {
+        canvas: HTMLCanvasElement;
+        ctx: CanvasRenderingContext2D;
+        particles: Particle[];
+        maxParticles: number;
+        resizeTimeout: number | null;
+        animate: (timestamp: number) => void;
+        lastFrame: number;
+        fps: number;
+
         constructor() {
             this.canvas = document.createElement('canvas');
             this.canvas.style.position = 'fixed';
@@ -49,20 +68,21 @@ document.addEventListener("DOMContentLoaded", function(){
             this.canvas.style.zIndex = '1';
             document.body.prepend(this.canvas);
             
-            this.ctx = this.canvas.getContext('2d');
+            this.ctx = this.canvas.getContext('2d')!;
             this.particles = [];
+            this.maxParticles = 100;
+            
             this.resizeTimeout = null;
             this.animate = this.animate.bind(this);
-            this.maxParticles = 100;
+
             this.init();
             window.addEventListener('resize', () => this.init());
             this.lastFrame = 0;
-            this.fps = 32; 
-            this.canvas.__particles__ = this.particles; 
-            this.animate();
+            this.fps = 60;
+            this.animate(0);
         }
-        
-        init() {
+
+        init(): void {
             this.canvas.width = window.innerWidth;
             this.canvas.height = window.innerHeight;
             
@@ -72,10 +92,10 @@ document.addEventListener("DOMContentLoaded", function(){
                 const y = Math.random() * this.canvas.height;
                 this.particles.push(new Particle(x, y));
             }
-            this.canvas.__particles__ = this.particles;
+            (this.canvas as any).__particles__ = this.particles;
         }
-        
-        animate(timestamp) {
+
+        animate(timestamp: number): void {
             if (!this.lastFrame) this.lastFrame = timestamp;
             const elapsed = timestamp - this.lastFrame;
             
@@ -88,7 +108,7 @@ document.addEventListener("DOMContentLoaded", function(){
                         this.checkCollision(this.particles[i], this.particles[j]);
                     }
                 }
-                
+
                 this.particles.forEach(particle => {
                     particle.update();
                     particle.draw(this.ctx);
@@ -105,7 +125,7 @@ document.addEventListener("DOMContentLoaded", function(){
             requestAnimationFrame((ts) => this.animate(ts));
         }
 
-        checkCollision(p1, p2) {
+        checkCollision(p1: Particle, p2: Particle): void {
             const dx = p2.x - p1.x;
             const dy = p2.y - p1.y;
             const distance = Math.sqrt(dx * dx + dy * dy);
@@ -128,7 +148,24 @@ document.addEventListener("DOMContentLoaded", function(){
         }
     }
 
+    interface Point {
+        x: number;
+        y: number;
+        lifetime: number;
+        size: number;
+        alpha: number;
+    }
+
     class Trail {
+        points: Point[];
+        maxPoints: number;
+        mouseMoveHandler: (event: MouseEvent) => void;
+        animationHandler: () => void;
+        lastX: number;
+        lastY: number;
+        pushRadius: number;
+        pushStrength: number;
+        
         constructor() {
             this.points = [];
             this.maxPoints = 25; 
@@ -136,14 +173,14 @@ document.addEventListener("DOMContentLoaded", function(){
             this.animationHandler = this.animate.bind(this);
             this.lastX = 0;
             this.lastY = 0;
-            this.pushRadius = 80; 
-            this.pushStrength = 2;
+            this.pushRadius = 80;  
+            this.pushStrength = 2; 
             
             document.addEventListener('mousemove', this.mouseMoveHandler);
             requestAnimationFrame(this.animationHandler);
         }
 
-        handleMouseMove(event) {
+        handleMouseMove(event: MouseEvent): void {
             const x = event.clientX;
             const y = event.clientY;
             
@@ -176,8 +213,11 @@ document.addEventListener("DOMContentLoaded", function(){
             this.pushParticles(x, y);
         }
 
-        pushParticles(x, y) {
-            const particles = document.querySelector('canvas').__particles__;
+        pushParticles(x: number, y: number): void {
+            const canvas = document.querySelector('canvas');
+            if (!canvas) return;
+            
+            const particles = (canvas as any).__particles__ as Particle[];
             if (!particles) return;
 
             particles.forEach(particle => {
@@ -193,11 +233,14 @@ document.addEventListener("DOMContentLoaded", function(){
             });
         }
 
-        animate() {
+        animate(): void {
             const canvas = document.querySelector('canvas');
+            if (!canvas) return;
+            
             const ctx = canvas.getContext('2d');
+            if (!ctx) return;
 
-            this.points.forEach((point, index) => {
+            this.points.forEach((point) => {
                 const opacity = (point.lifetime / 25) * point.alpha; 
                 
                 const gradient = ctx.createRadialGradient(
@@ -222,44 +265,60 @@ document.addEventListener("DOMContentLoaded", function(){
         }
     }
 
-    class TypeWriter {
+    class PictureGlow {
+        containers: NodeListOf<Element>;
+
         constructor() {
-            this.titleElement = document.getElementById('typing-title');
-            this.contentElement = document.getElementById('typing-content');
-            this.textElements = document.querySelectorAll('.typing-text');
-            this.title = "About me:";
-            this.charIndex = 0;
-            this.textIndex = 0;
-            this.init();
+            this.containers = document.querySelectorAll('.picture-container');
+            this.setupGlowEffects();
         }
 
-        init() {
-            this.typeTitle();
-        }
+        setupGlowEffects(): void {
+            this.containers.forEach(container => {
+                const canvas = container.querySelector('.glow') as HTMLCanvasElement;
+                if (!canvas) return;
+                
+                const ctx = canvas.getContext('2d');
+                if (!ctx) return;
+                
+                const updateCanvasSize = () => {
+                    canvas.width = (container as HTMLElement).offsetWidth;
+                    canvas.height = (container as HTMLElement).offsetHeight;
+                };
+                
+                updateCanvasSize();
+                window.addEventListener('resize', updateCanvasSize);
 
-        typeTitle() {
-            if (this.charIndex < this.title.length) {
-                this.titleElement.textContent += this.title.charAt(this.charIndex);
-                this.charIndex++;
-                setTimeout(() => this.typeTitle(), 100);
-            } else {
-                this.contentElement.style.opacity = '1';
-                this.showContent();
-            }
-        }
+                container.addEventListener('mousemove', (e: MouseEvent) => {
+                    const rect = (container as HTMLElement).getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    
+                    const gradient = ctx.createRadialGradient(
+                        x, y, 0,
+                        x, y, 100
+                    );
+                    
+                    gradient.addColorStop(0, 'rgba(255, 255, 255, 0.2)');
+                    gradient.addColorStop(0.5, 'rgba(255, 255, 255, 0.1)');
+                    gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+                    
+                    ctx.fillStyle = gradient;
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                });
 
-        showContent() {
-            if (this.textIndex < this.textElements.length) {
-                this.textElements[this.textIndex].classList.add('visible');
-                this.textIndex++;
-                setTimeout(() => this.showContent(), 100);
-            }
+                container.addEventListener('mouseleave', () => {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                });
+            });
         }
     }
 
     const particles = new ParticleSystem();
     const trail = new Trail();
-    const typeWriter = new TypeWriter();
+    const pictureGlow = new PictureGlow();
     
     window.addEventListener('resize', () => {
         if (particles.resizeTimeout) {
@@ -267,28 +326,4 @@ document.addEventListener("DOMContentLoaded", function(){
         }
         particles.resizeTimeout = setTimeout(() => particles.init(), 100);
     });
-
-    let heading = document.querySelector("h1");
-    heading.addEventListener("click", function(){
-        heading.textContent = "🍌";
-    });
-
-    let Heading = document.querySelector("h2");
-    Heading.addEventListener("click", function(){
-        Heading.textContent = "🥦";
-    });
-
-    let githubButton = document.createElement("button");
-    githubButton.textContent = "My GitHub";
-    githubButton.style.position = "fixed";
-    githubButton.style.top = "10px";
-    githubButton.style.right = "10px";
-    githubButton.style.zIndex = "2";
-    document.querySelector('.content').appendChild(githubButton);
-
-    githubButton.addEventListener("click", function(){
-        alert("🫶🏼");
-        window.open("https://github.com/C0d3-5t3w", "_blank");
-    });
-
 });
