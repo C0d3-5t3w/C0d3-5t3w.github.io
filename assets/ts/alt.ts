@@ -78,10 +78,8 @@ document.addEventListener("DOMContentLoaded", function(){
             this.init();
             window.addEventListener('resize', () => this.init());
             (this.canvas as any).__particles__ = this.particles;
-            
-            // Bind the animate method after it's defined
             this.animate = this.animate.bind(this);
-            // Start animation
+    
             this.animate(0);
         }
 
@@ -292,7 +290,6 @@ document.addEventListener("DOMContentLoaded", function(){
                 updateCanvasSize();
                 window.addEventListener('resize', updateCanvasSize);
 
-                // Fix the event type casting
                 (container as HTMLElement).addEventListener('mousemove', ((e: MouseEvent) => {
                     const rect = (container as HTMLElement).getBoundingClientRect();
                     const x = e.clientX - rect.left;
