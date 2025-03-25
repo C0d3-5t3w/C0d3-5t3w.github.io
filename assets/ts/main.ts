@@ -77,10 +77,7 @@ document.addEventListener("DOMContentLoaded", function(){
             this.init();
             window.addEventListener('resize', () => this.init());
             (this.canvas as any).__particles__ = this.particles; 
-            
-            // Bind the animate method after it's defined
             this.animate = this.animate.bind(this);
-            // Start animation
             this.animate(0);
         }
         
