@@ -53,7 +53,6 @@ document.addEventListener("DOMContentLoaded", function(){
         ctx: CanvasRenderingContext2D;
         particles: Particle[];
         resizeTimeout: number | null;
-        animate: (timestamp: number) => void;
         maxParticles: number;
         lastFrame: number;
         fps: number;
@@ -71,13 +70,17 @@ document.addEventListener("DOMContentLoaded", function(){
             this.ctx = this.canvas.getContext('2d')!;
             this.particles = [];
             this.resizeTimeout = null;
-            this.animate = this.animate.bind(this);
             this.maxParticles = 100;
-            this.init();
-            window.addEventListener('resize', () => this.init());
             this.lastFrame = 0;
             this.fps = 32; 
+            
+            this.init();
+            window.addEventListener('resize', () => this.init());
             (this.canvas as any).__particles__ = this.particles; 
+            
+            // Bind the animate method after it's defined
+            this.animate = this.animate.bind(this);
+            // Start animation
             this.animate(0);
         }
         
