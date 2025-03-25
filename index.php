@@ -25,9 +25,9 @@ $random_quote = $quotes[array_rand($quotes)];
             <h1>
                 C0D3
             </h1>
-            <h2>
+            <h1>
                 5T3W
-            </h2>
+            </h1>
             <h3 class="about-container">
                 <div id="typing-title"></div>
                 <div id="typing-content" class="typing-content">
@@ -92,8 +92,8 @@ $random_quote = $quotes[array_rand($quotes)];
                 <iframe style="border-radius:12px" src="https://open.spotify.com/embed/artist/1Cg54cIvfa7dz1GuYHvgAd?utm_source=generator&theme=0" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>                
             </div>
             <div class="quote-of-the-day">
-                <h2>Quote of the Day:</h2>
-                <p><?php echo $random_quote; ?></p>
+                <h1>Quote of the Day:</h1>
+                <h2><p><?php echo $random_quote; ?></p></h2>
             </div>
         </div>
         <script src="assets/js/main.js"></script>
