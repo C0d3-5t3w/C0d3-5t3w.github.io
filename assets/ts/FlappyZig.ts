@@ -22,15 +22,80 @@ const CONSTANTS = {
     SPEED_INCREASE_FACTOR: 0.15, 
     MAX_SPEED_MULTIPLIER: 2.5, 
     BULLET_SIZE_INCREASE: 2, 
-    MAX_BULLET_SIZE: 55 
+    MAX_BULLET_SIZE: 55,
+    SCREEN_WIDTH: 0,
+    SCREEN_HEIGHT: 0
 };
 
+interface Zig {
+    x: number;
+    y: number;
+    velY: number;
+    jumping: boolean;
+}
+
+interface Wall {
+    x: number;
+    height: number;
+    passed: boolean;
+}
+
+interface Bullet {
+    x: number;
+    y: number;
+    velX: number;
+    velY: number;
+    colorPhase: number;
+}
+
+interface Enemy {
+    x: number;
+    y: number;
+    baseY: number;
+    colorPhase: number;
+    movePhase: number;
+    shape: number;
+}
+
+interface TrailPoint {
+    x: number;
+    y: number;
+}
+
 class Game {
+    private canvas: HTMLCanvasElement;
+    private ctx: CanvasRenderingContext2D;
+    private zig: Zig;
+    private walls: Wall[];
+    private bullets: Bullet[];
+    private enemies: Enemy[];
+    private score: number;
+    private gameOver: boolean;
+    private deathTimer: number;
+    private canReset: boolean;
+    private spawnTimer: number;
+    private nextEnemyShape: number;
+    private colorCycle: number;
+    private highScores: number[];
+    private trail: TrailPoint[];
+    private trailLength: number;
+    private zigImg: HTMLImageElement;
+    private bgImg: HTMLImageElement;
+    private pipeImg: HTMLImageElement;
+    private meowImg: HTMLImageElement;
+    private noImg: HTMLImageElement;
+    private stopImg: HTMLImageElement;
+    private downImg: HTMLImageElement;
+    private badImg: HTMLImageElement;
+    private lastTime: number;
+    private speedMultiplier: number;
+    private currentBulletSize: number;
+
     constructor() {
         this.canvas = document.createElement('canvas');
         this.setupCanvas();
         document.body.appendChild(this.canvas);
-        this.ctx = this.canvas.getContext('2d');
+        this.ctx = this.canvas.getContext('2d')!;
         
         this.zig = {
             x: CONSTANTS.SCREEN_WIDTH / 4,
@@ -86,7 +151,7 @@ class Game {
         requestAnimationFrame(this.gameLoop.bind(this));
     }
 
-    setupCanvas() {
+    setupCanvas(): void {
         const aspectRatio = 9/18;
         let width = Math.min(window.innerWidth * 0.95, window.innerHeight * aspectRatio * 0.95);
         let height = width / aspectRatio;
@@ -105,7 +170,7 @@ class Game {
         CONSTANTS.SCREEN_HEIGHT = height;
     }
 
-    setupControls() {
+    setupControls(): void {
         document.addEventListener('keydown', (e) => {
             if (e.code === 'Space') {
                 if (this.gameOver && this.canReset) {
@@ -119,22 +184,6 @@ class Game {
             }
         });
 
-        // Mobile controls top/bottom
-        //this.canvas.addEventListener('touchstart', (e) => {
-            //e.preventDefault();
-            //const touch = e.touches[0];
-            //const rect = this.canvas.getBoundingClientRect();
-            //const y = touch.clientY - rect.top;
-            
-            //if (this.gameOver && this.canReset) {
-                //this.reset();
-            //} else if (y > this.canvas.height / 2) {
-                //this.zig.jumping = true;
-            //} else if (!this.gameOver) {
-                //this.shoot();
-            //}
-        //});
-        // Mobile controls left/right
         this.canvas.addEventListener('touchstart', (e) => {
             e.preventDefault();
             const touch = e.touches[0];
@@ -151,7 +200,7 @@ class Game {
         });
     }
 
-    reset() {
+    reset(): void {
         this.zig.x = CONSTANTS.SCREEN_WIDTH / 4;
         this.zig.y = CONSTANTS.SCREEN_HEIGHT / 2;
         this.zig.velY = 0;
@@ -168,12 +217,12 @@ class Game {
         this.currentBulletSize = CONSTANTS.BULLET_SIZE;
     }
 
-    shoot() {
+    shoot(): void {
         const bulletX = this.zig.x + CONSTANTS.ZIG_WIDTH;
         const bulletY = this.zig.y + CONSTANTS.ZIG_HEIGHT / 2;
         const [hasTarget, targetX, targetY] = this.findNearestEnemy(bulletX, bulletY);
 
-        let velX, velY;
+        let velX: number, velY: number;
         if (hasTarget) {
             const dx = targetX - bulletX;
             const dy = targetY - bulletY;
@@ -194,7 +243,7 @@ class Game {
         });
     }
 
-    findNearestEnemy(x, y) {
+    findNearestEnemy(x: number, y: number): [boolean, number, number] {
         let minDist = CONSTANTS.BULLET_AUTO_AIM_RANGE;
         let found = false;
         let targetX = 0, targetY = 0;
@@ -215,7 +264,7 @@ class Game {
         return [found, targetX, targetY];
     }
 
-    calculateDifficultyMultipliers() {
+    calculateDifficultyMultipliers(): void {
         const level = Math.floor(this.score / CONSTANTS.SPEED_INCREASE_INTERVAL);
         this.speedMultiplier = Math.min(
             1 + (level * CONSTANTS.SPEED_INCREASE_FACTOR),
@@ -228,7 +277,7 @@ class Game {
         );
     }
 
-    update() {
+    update(): void {
         if (this.gameOver) {
             this.deathTimer++;
             if (this.deathTimer >= CONSTANTS.DEATH_PAUSE) {
@@ -357,7 +406,7 @@ class Game {
         });
     }
 
-    draw() {
+    draw(): void {
         this.ctx.fillStyle = 'black';
         this.ctx.fillRect(0, 0, CONSTANTS.SCREEN_WIDTH, CONSTANTS.SCREEN_HEIGHT);
 
@@ -421,31 +470,33 @@ class Game {
         this.drawUI();
     }
 
-    drawWall(wall) {
+    drawWall(wall: Wall): void {
         this.ctx.fillStyle = 'black';
         this.ctx.fillRect(wall.x - 2, 0, 44, wall.height);
         this.ctx.fillRect(wall.x - 2, wall.height + CONSTANTS.WALL_GAP, 44, CONSTANTS.SCREEN_HEIGHT - wall.height - CONSTANTS.WALL_GAP);
 
         if (this.pipeImg.complete) {
             const pattern = this.ctx.createPattern(this.pipeImg, 'repeat');
-            this.ctx.save();
+            if (pattern) {
+                this.ctx.save();
 
-            this.ctx.beginPath();
-            this.ctx.rect(wall.x, 0, 40, wall.height);
-            this.ctx.clip();
-            this.ctx.translate(wall.x, 0);
-            this.ctx.fillStyle = pattern;
-            this.ctx.fillRect(0, 0, 40, wall.height);
-            this.ctx.restore();
+                this.ctx.beginPath();
+                this.ctx.rect(wall.x, 0, 40, wall.height);
+                this.ctx.clip();
+                this.ctx.translate(wall.x, 0);
+                this.ctx.fillStyle = pattern;
+                this.ctx.fillRect(0, 0, 40, wall.height);
+                this.ctx.restore();
 
-            this.ctx.save();
-            this.ctx.beginPath();
-            this.ctx.rect(wall.x, wall.height + CONSTANTS.WALL_GAP, 40, CONSTANTS.SCREEN_HEIGHT - wall.height - CONSTANTS.WALL_GAP);
-            this.ctx.clip();
-            this.ctx.translate(wall.x, wall.height + CONSTANTS.WALL_GAP);
-            this.ctx.fillStyle = pattern;
-            this.ctx.fillRect(0, 0, 40, CONSTANTS.SCREEN_HEIGHT - wall.height - CONSTANTS.WALL_GAP);
-            this.ctx.restore();
+                this.ctx.save();
+                this.ctx.beginPath();
+                this.ctx.rect(wall.x, wall.height + CONSTANTS.WALL_GAP, 40, CONSTANTS.SCREEN_HEIGHT - wall.height - CONSTANTS.WALL_GAP);
+                this.ctx.clip();
+                this.ctx.translate(wall.x, wall.height + CONSTANTS.WALL_GAP);
+                this.ctx.fillStyle = pattern;
+                this.ctx.fillRect(0, 0, 40, CONSTANTS.SCREEN_HEIGHT - wall.height - CONSTANTS.WALL_GAP);
+                this.ctx.restore();
+            }
         } else {
             this.ctx.fillStyle = 'white';
             this.ctx.fillRect(wall.x, 0, 40, wall.height);
@@ -453,7 +504,7 @@ class Game {
         }
     }
 
-    drawBullet(bullet) {
+    drawBullet(bullet: Bullet): void {
         const r = 0.5 + Math.sin(bullet.colorPhase) * 0.5;
         const g = 0.5 + Math.sin(bullet.colorPhase + Math.PI * 2/3) * 0.5;
         const b = 0.5 + Math.sin(bullet.colorPhase + Math.PI * 4/3) * 0.5;
@@ -487,7 +538,7 @@ class Game {
         }
     }
 
-    drawEnemy(enemy) {
+    drawEnemy(enemy: Enemy): void {
         const r = 0.5 + Math.sin(enemy.colorPhase) * 0.5;
         const g = 0.5 + Math.sin(enemy.colorPhase + Math.PI * 2/3) * 0.5;
         const b = 0.5 + Math.sin(enemy.colorPhase + Math.PI * 4/3) * 0.5;
@@ -590,7 +641,7 @@ class Game {
         }
     }
 
-    drawUI() {
+    drawUI(): void {
         this.ctx.fillStyle = 'white';
         this.ctx.font = '20px Arial';
         if (this.gameOver) {
@@ -610,7 +661,7 @@ class Game {
         }
     }
 
-    checkWallCollision(wall) {
+    checkWallCollision(wall: Wall): boolean {
         return (
             this.zig.x < wall.x + 40 &&
             this.zig.x + CONSTANTS.ZIG_WIDTH > wall.x &&
@@ -619,7 +670,7 @@ class Game {
         );
     }
 
-    checkEnemyCollision(enemy) {
+    checkEnemyCollision(enemy: Enemy): boolean {
         const zigCenterX = this.zig.x + CONSTANTS.ZIG_WIDTH/2;
         const zigCenterY = this.zig.y + CONSTANTS.ZIG_HEIGHT/2;
         const enemyCenterX = enemy.x + CONSTANTS.ENEMY_SIZE/2;
@@ -633,7 +684,7 @@ class Game {
         return distance < CONSTANTS.ZIG_WIDTH/2 + CONSTANTS.ENEMY_SIZE/2;
     }
 
-    checkBulletEnemyCollision(bullet, enemy) {
+    checkBulletEnemyCollision(bullet: Bullet, enemy: Enemy): boolean {
         const bulletCenterX = bullet.x + this.currentBulletSize/2;
         const bulletCenterY = bullet.y + this.currentBulletSize/2;
         const enemyCenterX = enemy.x + CONSTANTS.ENEMY_SIZE/2;
@@ -647,7 +698,7 @@ class Game {
         return distance < this.currentBulletSize/2 + CONSTANTS.ENEMY_SIZE/2;
     }
 
-    checkEnemyTrailCollision(enemy) {
+    checkEnemyTrailCollision(enemy: Enemy): boolean {
         const enemyCenterX = enemy.x + CONSTANTS.ENEMY_SIZE/2;
         const enemyCenterY = enemy.y + CONSTANTS.ENEMY_SIZE/2;
         
@@ -673,7 +724,7 @@ class Game {
         return false;
     }
 
-    pointLineDistance(x, y, x1, y1, x2, y2) {
+    pointLineDistance(x: number, y: number, x1: number, y1: number, x2: number, y2: number): number {
         const A = x - x1;
         const B = y - y1;
         const C = x2 - x1;
@@ -704,12 +755,12 @@ class Game {
         return Math.sqrt(dx * dx + dy * dy);
     }
 
-    loadHighScores() {
+    loadHighScores(): number[] {
         const scores = localStorage.getItem('highScores');
         return scores ? JSON.parse(scores) : [];
     }
 
-    saveHighScore(score) {
+    saveHighScore(score: number): void {
         let scores = this.loadHighScores();
         scores.push(score);
         scores.sort((a, b) => b - a);
@@ -720,7 +771,7 @@ class Game {
         localStorage.setItem('highScores', JSON.stringify(scores));
     }
 
-    gameLoop(timestamp) {
+    gameLoop(timestamp: number): void {
         const deltaTime = timestamp - this.lastTime;
         this.lastTime = timestamp;
 
