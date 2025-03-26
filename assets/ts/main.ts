@@ -357,10 +357,42 @@ document.addEventListener("DOMContentLoaded", function(){
         }
     }
 
+    class FogEffect {
+        fogCorners: HTMLElement[] = [];
+        
+        constructor() {
+            this.createFogElements();
+            this.animateFog();
+        }
+        
+        createFogElements(): void {
+            const fogContainer = document.createElement('div');
+            fogContainer.className = 'fog-container';
+            document.body.appendChild(fogContainer);
+            
+            const positions = ['top-left', 'top-right', 'bottom-left', 'bottom-right'];
+            
+            positions.forEach(position => {
+                const fogCorner = document.createElement('div');
+                fogCorner.className = `fog-corner ${position}`;
+                fogContainer.appendChild(fogCorner);
+                this.fogCorners.push(fogCorner);
+            });
+        }
+        
+        animateFog(): void {
+            this.fogCorners.forEach((corner, index) => {
+                const pulseSpeed = 3000 + (index * 500); // Slightly different speeds for each corner
+                corner.style.animation = `fogPulse ${pulseSpeed}ms infinite alternate ease-in-out`;
+            });
+        }
+    }
+
     const particles = new ParticleSystem();
     const trail = new Trail();
     const typeWriter = new TypeWriter();
     const pictureGlow = new PictureGlow(); 
+    const fogEffect = new FogEffect();
     
     window.addEventListener('resize', () => {
         if (particles.resizeTimeout) {

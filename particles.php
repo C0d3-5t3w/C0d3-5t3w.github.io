@@ -9,7 +9,7 @@
             .particle {
                 position: absolute;
                 border-radius: 50%;
-                pointer-events: auto; /* Changed from none to auto to enable mouse interaction */
+                pointer-events: auto; 
                 animation: float 3s infinite;
                 transition: transform 0.3s ease-out;
                 z-index: 10;
@@ -35,8 +35,8 @@
             header("Cache-Control: no-cache, must-revalidate");
             header("Expires: Sat, 26 Jul 1997 05:00:00 GMT");
 
-            for($i = 0; $i < 50; $i++) {
-                $size = rand(5, 20);
+            for($i = 0; $i < 1000; $i++) { 
+                $size = rand(10, 30); 
                 $x = rand(0, 100);
                 $y = rand(0, 100);
                 $hue = rand(0, 360);
@@ -63,20 +63,18 @@
         </div>
         <script>
             document.addEventListener('DOMContentLoaded', function() {
-                // Get all particles
                 const particles = document.querySelectorAll('.particle');
                 
-                // Add event listeners to each particle
                 particles.forEach(particle => {
                     particle.dataset.speed = (Math.random() * 2 - 1).toFixed(2);
+                    particle.dataset.velX = (Math.random() * 2 - 1).toFixed(2);
+                    particle.dataset.velY = (Math.random() * 2 - 1).toFixed(2);
                     
-                    // Add the event listener with a direct function reference
                     particle.addEventListener('mouseover', function() {
                         explodeParticle(this);
                     });
                 });
                 
-                // Function to create a new particle
                 function createParticle(size, x, y, hue) {
                     const particle = document.createElement('div');
                     particle.className = 'particle';
@@ -87,17 +85,16 @@
                     particle.style.background = `hsla(${hue}, 70%, 50%, 0.6)`;
                     particle.style.animationDelay = `${Math.random() * 0.5}s`;
                     
-                    // Store data attributes for future reference
                     particle.dataset.size = size;
                     particle.dataset.x = x;
                     particle.dataset.y = y;
                     particle.dataset.hue = hue;
                     particle.dataset.speed = (Math.random() * 2 - 1).toFixed(2);
+                    particle.dataset.velX = (Math.random() * 2 - 1).toFixed(2);
+                    particle.dataset.velY = (Math.random() * 2 - 1).toFixed(2);
                     
-                    // Add to container
                     document.getElementById('particle-container').appendChild(particle);
                     
-                    // Add event listener to the new particle
                     particle.addEventListener('mouseover', function() {
                         explodeParticle(this);
                     });
@@ -105,9 +102,7 @@
                     return particle;
                 }
                 
-                // Function to explode a particle
                 function explodeParticle(particle) {
-                    // Get the particle's data
                     const size = parseInt(particle.dataset.size || particle.style.width);
                     const x = parseFloat(particle.dataset.x || particle.style.left);
                     const y = parseFloat(particle.dataset.y || particle.style.top);
@@ -115,13 +110,11 @@
                                  (particle.style.background.includes('hsla') ? 
                                   particle.style.background.match(/hsla\((\d+)/)[1] : 0));
                     
-                    // Don't explode particles that are too small
                     if (size < 4) {
                         particle.remove();
                         return;
                     }
                     
-                    // Create smaller particles
                     for (let i = 0; i < 5; i++) {
                         const newSize = size / 2;
                         const newX = x + (Math.random() * 10 - 5);
@@ -131,11 +124,74 @@
                         createParticle(newSize, newX, newY, newHue);
                     }
                     
-                    // Remove the original particle
                     particle.remove();
                 }
                 
-                // Mouse move effect
+                function checkCollisions() {
+                    const particleArray = Array.from(document.querySelectorAll('.particle'));
+                    
+                    for (let i = 0; i < particleArray.length; i++) {
+                        for (let j = i + 1; j < particleArray.length; j++) {
+                            const p1 = particleArray[i];
+                            const p2 = particleArray[j];
+                            
+                            const p1Rect = p1.getBoundingClientRect();
+                            const p2Rect = p2.getBoundingClientRect();
+                            
+                            const p1X = p1Rect.left + p1Rect.width / 2;
+                            const p1Y = p1Rect.top + p1Rect.height / 2;
+                            const p2X = p2Rect.left + p2Rect.width / 2;
+                            const p2Y = p2Rect.top + p2Rect.height / 2;
+                            
+                            const dx = p2X - p1X;
+                            const dy = p2Y - p1Y;
+                            const distance = Math.sqrt(dx * dx + dy * dy);
+                            
+                            const minDistance = (p1Rect.width + p2Rect.width) / 2;
+                            
+                            if (distance < minDistance) {
+                                const tempVelX = p1.dataset.velX;
+                                const tempVelY = p1.dataset.velY;
+                                
+                                p1.dataset.velX = p2.dataset.velX;
+                                p1.dataset.velY = p2.dataset.velY;
+                                
+                                p2.dataset.velX = tempVelX;
+                                p2.dataset.velY = tempVelY;
+                                
+                                const angle = Math.atan2(dy, dx);
+                                const pushX = Math.cos(angle) * 2;
+                                const pushY = Math.sin(angle) * 2;
+                                
+                                p1.style.transform = `translate(${-pushX}px, ${-pushY}px)`;
+                                p2.style.transform = `translate(${pushX}px, ${pushY}px)`;
+                            }
+                        }
+                    }
+                }
+                
+                function moveParticles() {
+                    document.querySelectorAll('.particle').forEach(particle => {
+                        const rect = particle.getBoundingClientRect();
+                        const x = rect.left;
+                        const y = rect.top;
+                        
+                        let velX = parseFloat(particle.dataset.velX || 0);
+                        let velY = parseFloat(particle.dataset.velY || 0);
+                        
+                        particle.style.left = `${(x + velX) / window.innerWidth * 100}%`;
+                        particle.style.top = `${(y + velY) / window.innerHeight * 100}%`;
+                        
+                        if (x < 0 || x > window.innerWidth - rect.width) {
+                            particle.dataset.velX = (-velX).toFixed(2);
+                        }
+                        
+                        if (y < 0 || y > window.innerHeight - rect.height) {
+                            particle.dataset.velY = (-velY).toFixed(2);
+                        }
+                    });
+                }
+                
                 document.addEventListener('mousemove', (e) => {
                     const mouseX = e.clientX;
                     const mouseY = e.clientY;
@@ -145,7 +201,6 @@
                     document.querySelectorAll('.particle').forEach(particle => {
                         const speed = parseFloat(particle.dataset.speed || 0);
                         
-                        // Calculate the distance-based influence
                         const rect = particle.getBoundingClientRect();
                         const particleX = rect.left + rect.width / 2;
                         const particleY = rect.top + rect.height / 2;
@@ -154,30 +209,30 @@
                         const dy = mouseY - particleY;
                         const distance = Math.sqrt(dx * dx + dy * dy);
                         
-                        const maxDistance = 300; // Maximum distance for effect
+                        const maxDistance = 300; 
                         
                         if (distance < maxDistance) {
-                            // Stronger effect for closer particles
                             const influence = 1 - distance / maxDistance;
                             const moveX = dx * influence * speed * 0.1;
                             const moveY = dy * influence * speed * 0.1;
                             
-                            // Apply the transform
                             particle.style.transform = `translate(${moveX}px, ${moveY}px)`;
                         }
                     });
                 });
                 
-                // Periodically create new particles to replace the ones that exploded
                 setInterval(() => {
-                    if (document.querySelectorAll('.particle').length < 30) {
-                        const size = 5 + Math.random() * 15;
+                    moveParticles();
+                    checkCollisions();
+                    
+                    if (document.querySelectorAll('.particle').length < 600) {
+                        const size = 10 + Math.random() * 20; 
                         const x = Math.random() * 100;
                         const y = Math.random() * 100;
                         const hue = Math.random() * 360;
                         createParticle(size, x, y, hue);
                     }
-                }, 2000);
+                }, 100);
             });
         </script>
     </body>

@@ -1,12 +1,35 @@
 <?php
+header("Cache-Control: no-cache, must-revalidate");
+header("Expires: Sat, 26 Jul 1997 05:00:00 GMT");
+
 $quotes = [
-    "Code is like humor. When you have to explain it, it’s bad.",
+    "Code is like humor. When you have to explain it, it's bad.",
     "Fix the cause, not the symptom.",
     "Optimism is an occupational hazard of programming: feedback is the treatment.",
     "When to use iterative development? You should use iterative development only on projects that you want to succeed.",
     "Simplicity is the soul of efficiency.",
     "Before software can be reusable it first has to be usable.",
-    "Make it work, make it right, make it fast."
+    "Make it work, make it right, make it fast.",
+    "Cooking is like programming: you follow a recipe until you know what you're doing.",
+    "Both cooking and coding require patience, precision, and creativity.",
+    "Debugging and tasting are both iterative processes of refinement.",
+    "The best chefs and the best programmers know when to follow the rules and when to break them.",
+    "Refactoring code is like reducing a sauce - you're concentrating flavor and removing excess.",
+    "Cooking without tasting is like programming without testing.",
+    "Clean code is like a clean kitchen - it makes everything else easier.",
+    "Both cooking and coding start with raw ingredients and end with something valuable.",
+    "Good documentation is like a good recipe - it helps others reproduce your success.",
+    "Cooking and coding both benefit from peer review.",
+    "Scalable recipes and scalable code share many design principles.",
+    "Both chefs and developers know the importance of proper tools.",
+    "Comments in code are like notes in a recipe margin.",
+    "Cooking and coding both require understanding the underlying principles, not just following instructions.",
+    "Good error handling is like knowing how to fix a broken sauce.",
+    "The best dishes and the best programs are elegant in their simplicity.",
+    "Memory management in programming is like inventory management in a kitchen.",
+    "Technical debt is like a messy kitchen - eventually you have to clean it up.",
+    "Both cooking and coding reward experimentation within constraints.",
+    "In both cooking and coding, sometimes you have to break things to make them better."
 ];
 
 $random_quote = $quotes[array_rand($quotes)];
