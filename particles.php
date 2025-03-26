@@ -57,7 +57,7 @@
             }
         </style>
     </head>
-    <body>
+    <body class="fog-container">
         <div id="particle-stats">Particles: <span id="particle-count">0</span></div>
         <div id="particle-container">
             <?php
