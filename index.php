@@ -83,7 +83,7 @@ $random_quote = $quotes[array_rand($quotes)];
             }
         </style>
     </head>
-    <body class="fog-container">
+    <body>
         <div class="content">
             <img src="assets/images/THELOGO.jpg" alt="5T3W Logo" class="logo">
             <h1>
