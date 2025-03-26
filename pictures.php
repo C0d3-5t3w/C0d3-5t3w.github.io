@@ -112,7 +112,7 @@ $spotlight = $images[array_rand($images)];
 <body>
     <div class="content">
         <h1>My Pictures</h1>
-        
+        <!--
         <div class="spotlight">
             <img src="<?php echo $spotlight['src']; ?>" alt="<?php echo $spotlight['alt']; ?>">
             <div class="spotlight-info">
@@ -123,7 +123,7 @@ $spotlight = $images[array_rand($images)];
                 </form>
             </div>
         </div>
-        
+        -->
         <div class="gallery">
             <div class="picture-container small">
                 <img src="assets/images/z1.png" alt="Ziggy!">
