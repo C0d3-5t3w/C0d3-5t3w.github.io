@@ -10,7 +10,7 @@
             margin: 0;
             padding: 0;
             overflow: hidden;
-            background-color: #000000;
+            background: linear-gradient(45deg, red, teal, gold);
         }
 
         canvas {
