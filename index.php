@@ -89,9 +89,9 @@ $random_quote = $quotes[array_rand($quotes)];
             <h1>
                 C0D3-5T3W
             </h1>
-            <h1>
+            <h2>
                 Welcome!
-            </h1>
+            </h2>
             <h3 class="about-container">
                 <div id="typing-title"></div>
                 <div id="typing-content" class="typing-content">
