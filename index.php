@@ -23,10 +23,10 @@ $random_quote = $quotes[array_rand($quotes)];
         <div class="content">
             <img src="assets/images/THELOGO.jpg" alt="5T3W Logo" class="logo">
             <h1>
-                C0D3
+                C0D3-5T3W
             </h1>
             <h1>
-                5T3W
+                Welcome!
             </h1>
             <h3 class="about-container">
                 <div id="typing-title"></div>
