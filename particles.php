@@ -11,13 +11,30 @@
                 border-radius: 50%;
                 pointer-events: auto; 
                 animation: float 3s infinite;
-                transition: transform 0.3s ease-out;
+                transition: transform 0.3s ease-out, background 0.3s ease;
                 z-index: 10;
+                cursor: pointer; 
             }
             @keyframes float {
                 0% { transform: translateY(0); }
                 50% { transform: translateY(-20px); }
                 100% { transform: translateY(0); }
+            }
+            @keyframes explode {
+                0% { transform: scale(1) rotate(0deg); opacity: 1; }
+                50% { transform: scale(1.5) rotate(180deg); opacity: 0.7; }
+                100% { transform: scale(2) rotate(360deg); opacity: 0; }
+            }
+            .exploding {
+                animation: explode 0.5s forwards !important;
+                pointer-events: none; 
+            }
+            .child-particle {
+                position: absolute;
+                border-radius: 50%;
+                pointer-events: auto;
+                animation: float 2s infinite; 
+                transition: all 0.3s ease;
             }
             .content {
                 position: relative;
@@ -27,9 +44,21 @@
                 overflow-x: hidden;
                 min-height: 100vh;
             }
+            #particle-stats {
+                position: fixed;
+                top: 10px;
+                right: 10px;
+                background: rgba(0,0,0,0.7);
+                color: white;
+                padding: 10px;
+                border-radius: 5px;
+                font-family: monospace;
+                z-index: 1000;
+            }
         </style>
     </head>
     <body>
+        <div id="particle-stats">Particles: <span id="particle-count">0</span></div>
         <div id="particle-container">
             <?php
             header("Cache-Control: no-cache, must-revalidate");
@@ -64,13 +93,21 @@
         <script>
             document.addEventListener('DOMContentLoaded', function() {
                 const particles = document.querySelectorAll('.particle');
+                const particleContainer = document.getElementById('particle-container');
+                const particleCountDisplay = document.getElementById('particle-count');
+                
+                function updateParticleCount() {
+                    particleCountDisplay.textContent = document.querySelectorAll('.particle').length;
+                }
+                updateParticleCount();
                 
                 particles.forEach(particle => {
                     particle.dataset.speed = (Math.random() * 2 - 1).toFixed(2);
                     particle.dataset.velX = (Math.random() * 2 - 1).toFixed(2);
                     particle.dataset.velY = (Math.random() * 2 - 1).toFixed(2);
                     
-                    particle.addEventListener('mouseover', function() {
+                    particle.addEventListener('mouseenter', function(e) {
+                        e.stopPropagation();
                         explodeParticle(this);
                     });
                 });
@@ -93,42 +130,57 @@
                     particle.dataset.velX = (Math.random() * 2 - 1).toFixed(2);
                     particle.dataset.velY = (Math.random() * 2 - 1).toFixed(2);
                     
-                    document.getElementById('particle-container').appendChild(particle);
+                    particleContainer.appendChild(particle);
                     
-                    particle.addEventListener('mouseover', function() {
+                    particle.addEventListener('mouseenter', function(e) {
+                        e.stopPropagation();
                         explodeParticle(this);
                     });
                     
+                    updateParticleCount();
                     return particle;
                 }
                 
                 function explodeParticle(particle) {
-                    const size = parseInt(particle.dataset.size || particle.style.width);
-                    const x = parseFloat(particle.dataset.x || particle.style.left);
-                    const y = parseFloat(particle.dataset.y || particle.style.top);
-                    const hue = parseInt(particle.dataset.hue || 
-                                 (particle.style.background.includes('hsla') ? 
-                                  particle.style.background.match(/hsla\((\d+)/)[1] : 0));
+                    const size = parseFloat(particle.dataset.size);
+                    const x = parseFloat(particle.dataset.x);
+                    const y = parseFloat(particle.dataset.y);
+                    const hue = parseInt(particle.dataset.hue);
                     
-                    if (size < 4) {
+                    if (size < 5) {
                         particle.remove();
+                        updateParticleCount();
                         return;
                     }
                     
-                    for (let i = 0; i < 5; i++) {
-                        const newSize = size / 2;
-                        const newX = x + (Math.random() * 10 - 5);
-                        const newY = y + (Math.random() * 10 - 5);
-                        const newHue = hue + (Math.random() * 30 - 15);
+                    particle.classList.add('exploding');
+                    
+                    const numChildren = Math.min(Math.floor(size / 2), 8);
+                    
+                    for (let i = 0; i < numChildren; i++) {
+                        const newSize = Math.max(size / 2, 5); 
+                        const angle = (i / numChildren) * Math.PI * 2; 
+                        const distance = size / 2; 
                         
-                        createParticle(newSize, newX, newY, newHue);
+                        const newX = x + (Math.cos(angle) * distance * 0.1) + (Math.random() * 5 - 2.5);
+                        const newY = y + (Math.sin(angle) * distance * 0.1) + (Math.random() * 5 - 2.5);
+                        
+                        const newHue = (hue + Math.random() * 60 - 30) % 360;
+                        
+                        const childParticle = createParticle(newSize, newX, newY, newHue);
+                        
+                        childParticle.dataset.velX = (Math.cos(angle) * 2 + Math.random() - 0.5).toFixed(2);
+                        childParticle.dataset.velY = (Math.sin(angle) * 2 + Math.random() - 0.5).toFixed(2);
                     }
                     
-                    particle.remove();
+                    setTimeout(() => {
+                        particle.remove();
+                        updateParticleCount();
+                    }, 500); 
                 }
                 
                 function checkCollisions() {
-                    const particleArray = Array.from(document.querySelectorAll('.particle'));
+                    const particleArray = Array.from(document.querySelectorAll('.particle:not(.exploding)'));
                     
                     for (let i = 0; i < particleArray.length; i++) {
                         for (let j = i + 1; j < particleArray.length; j++) {
@@ -171,7 +223,7 @@
                 }
                 
                 function moveParticles() {
-                    document.querySelectorAll('.particle').forEach(particle => {
+                    document.querySelectorAll('.particle:not(.exploding)').forEach(particle => {
                         const rect = particle.getBoundingClientRect();
                         const x = rect.left;
                         const y = rect.top;
@@ -195,10 +247,8 @@
                 document.addEventListener('mousemove', (e) => {
                     const mouseX = e.clientX;
                     const mouseY = e.clientY;
-                    const windowWidth = window.innerWidth;
-                    const windowHeight = window.innerHeight;
                     
-                    document.querySelectorAll('.particle').forEach(particle => {
+                    document.querySelectorAll('.particle:not(.exploding)').forEach(particle => {
                         const speed = parseFloat(particle.dataset.speed || 0);
                         
                         const rect = particle.getBoundingClientRect();
@@ -225,7 +275,9 @@
                     moveParticles();
                     checkCollisions();
                     
-                    if (document.querySelectorAll('.particle').length < 600) {
+                    const currentCount = document.querySelectorAll('.particle').length;
+                    
+                    if (currentCount < 600) {
                         const size = 10 + Math.random() * 20; 
                         const x = Math.random() * 100;
                         const y = Math.random() * 100;
