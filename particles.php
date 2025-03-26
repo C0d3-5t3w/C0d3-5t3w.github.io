@@ -46,10 +46,10 @@
             }
             #particle-stats {
                 position: fixed;
-                top: 10px;
+                bottom: 10px;
                 right: 10px;
-                background: rgba(0,0,0,0.7);
                 color: white;
+                background: linear-gradient(45deg, red, teal, gold);
                 padding: 10px;
                 border-radius: 5px;
                 font-family: monospace;
