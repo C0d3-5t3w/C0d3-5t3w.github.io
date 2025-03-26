@@ -15,10 +15,10 @@
 
         canvas {
             display: block;
-            margin: auto;
-            max-width: 100%;
-            max-height: 100%;
+            width: 100vw;
+            height: 100vh;
         }
+
         .home-link {
             color: white;
             text-decoration: none;
@@ -26,17 +26,29 @@
             margin: 10px;
             font-family: Arial, sans-serif;
         }
+
         .home-link:hover {
             text-decoration: underline;
         }
+
+        #controls {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
     </style>
 </head>
-<body class="body">
+<body>
     <a href="index.html" class="home-link">Home</a>
     <div class="canvas">
-    <script src="assets/js/FlappyZig.js" class="canvas"></script>
+        <script src="assets/js/FlappyZig.js" class="canvas"></script>
     </div>
-    <div id="controls" style="bottom: 0; color: white; text-align: center; padding: 20px; font-family: Arial, sans-serif;">
+    <div id="controls">
         <h3>Controls:</h3>
         <p>Desktop: SPACE to jump, G to shoot</p>
         <p>Mobile: Tap left half to jump, right half to shoot</p>
