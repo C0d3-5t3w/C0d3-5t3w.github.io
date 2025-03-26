@@ -92,6 +92,11 @@
                     e.stopPropagation();
                     explodeParticle(this);
                 });
+
+                particle.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    explodeParticle(this);
+                });
             });
             
             function createParticle(size, x, y, hue) {
@@ -111,6 +116,11 @@
                 particleContainer.appendChild(particle);
                 
                 particle.addEventListener('mouseenter', function(e) {
+                    e.stopPropagation();
+                    explodeParticle(this);
+                });
+
+                particle.addEventListener('click', function(e) {
                     e.stopPropagation();
                     explodeParticle(this);
                 });
@@ -155,6 +165,14 @@
                     updateParticleCount();
                 }, 500); 
             }
+
+            document.addEventListener('touchstart', function(e) {
+                const touch = e.touches[0];
+                const element = document.elementFromPoint(touch.clientX, touch.clientY);
+                if (element && element.classList.contains('particle')) {
+                    explodeParticle(element);
+                }
+            });
         });
     </script>
 </body>
