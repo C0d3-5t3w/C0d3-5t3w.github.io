@@ -124,6 +124,8 @@
                 const x = parseFloat(particle.dataset.x);
                 const y = parseFloat(particle.dataset.y);
                 const hue = parseInt(particle.dataset.hue);
+
+                console.log('Exploding particle:', size, x, y, hue);
                 
                 if (size < 5) {
                     particle.remove();
