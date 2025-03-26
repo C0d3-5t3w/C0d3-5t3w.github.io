@@ -9,16 +9,10 @@
         .particle {
             position: absolute;
             border-radius: 50%;
-            pointer-events: auto; 
-            animation: float 3s infinite;
+            pointer-events: auto;
             transition: transform 0.3s ease-out, background 0.3s ease;
             z-index: 10;
-            cursor: pointer; 
-        }
-        @keyframes float {
-            0% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
-            100% { transform: translateY(0); }
+            cursor: pointer;
         }
         @keyframes explode {
             0% { transform: scale(1) rotate(0deg); opacity: 1; }
@@ -27,14 +21,7 @@
         }
         .exploding {
             animation: explode 0.5s forwards !important;
-            pointer-events: none; 
-        }
-        .child-particle {
-            position: absolute;
-            border-radius: 50%;
-            pointer-events: auto;
-            animation: float 2s infinite; 
-            transition: all 0.3s ease;
+            pointer-events: none;
         }
         .content {
             position: relative;
@@ -80,7 +67,6 @@
                 left: {$x}%;
                 top: {$y}%;
                 background: hsla({$hue}, 70%, 50%, 0.6);
-                animation-delay: " . ($i * 0.1) . "s;
             '></div>";
         }
         ?>
@@ -120,7 +106,6 @@
                 particle.style.left = `${x}%`;
                 particle.style.top = `${y}%`;
                 particle.style.background = `hsla(${hue}, 70%, 50%, 0.6)`;
-                particle.style.animationDelay = `${Math.random() * 0.5}s`;
                 
                 particle.dataset.size = size;
                 particle.dataset.x = x;
@@ -179,49 +164,6 @@
                 }, 500); 
             }
             
-            function checkCollisions() {
-                const particleArray = Array.from(document.querySelectorAll('.particle:not(.exploding)'));
-                
-                for (let i = 0; i < particleArray.length; i++) {
-                    for (let j = i + 1; j < particleArray.length; j++) {
-                        const p1 = particleArray[i];
-                        const p2 = particleArray[j];
-                        
-                        const p1Rect = p1.getBoundingClientRect();
-                        const p2Rect = p2.getBoundingClientRect();
-                        
-                        const p1X = p1Rect.left + p1Rect.width / 2;
-                        const p1Y = p1Rect.top + p1Rect.height / 2;
-                        const p2X = p2Rect.left + p2Rect.width / 2;
-                        const p2Y = p2Rect.top + p2Rect.height / 2;
-                        
-                        const dx = p2X - p1X;
-                        const dy = p2Y - p1Y;
-                        const distance = Math.sqrt(dx * dx + dy * dy);
-                        
-                        const minDistance = (p1Rect.width + p2Rect.width) / 2;
-                        
-                        if (distance < minDistance) {
-                            const tempVelX = p1.dataset.velX;
-                            const tempVelY = p1.dataset.velY;
-                            
-                            p1.dataset.velX = p2.dataset.velX;
-                            p1.dataset.velY = p2.dataset.velY;
-                            
-                            p2.dataset.velX = tempVelX;
-                            p2.dataset.velY = tempVelY;
-                            
-                            const angle = Math.atan2(dy, dx);
-                            const pushX = Math.cos(angle) * 2;
-                            const pushY = Math.sin(angle) * 2;
-                            
-                            p1.style.transform = `translate(${-pushX}px, ${-pushY}px)`;
-                            p2.style.transform = `translate(${pushX}px, ${pushY}px)`;
-                        }
-                    }
-                }
-            }
-            
             function moveParticles() {
                 document.querySelectorAll('.particle:not(.exploding)').forEach(particle => {
                     const rect = particle.getBoundingClientRect();
@@ -273,7 +215,6 @@
             
             setInterval(() => {
                 moveParticles();
-                checkCollisions();
                 
                 const currentCount = document.querySelectorAll('.particle').length;
                 
