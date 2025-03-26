@@ -10,6 +10,7 @@
             margin: 0;
             padding: 0;
             overflow: hidden;
+            background-color: #000000;
             background: linear-gradient(45deg, red, teal, gold);
         }
 
@@ -53,5 +54,21 @@
         <p>Desktop: SPACE to jump, G to shoot</p>
         <p>Mobile: Tap left half to jump, right half to shoot</p>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const controls = document.getElementById('controls');
+
+            function hideControls() {
+                controls.style.display = 'none';
+            }
+
+            document.addEventListener('click', hideControls);
+            document.addEventListener('keydown', function(event) {
+                if (event.code === 'Space') {
+                    hideControls();
+                }
+            });
+        });
+    </script>
 </body>
 </html>
