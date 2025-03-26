@@ -88,10 +88,6 @@
             updateParticleCount();
             
             particles.forEach(particle => {
-                particle.dataset.speed = (Math.random() * 2 - 1).toFixed(2);
-                particle.dataset.velX = (Math.random() * 2 - 1).toFixed(2);
-                particle.dataset.velY = (Math.random() * 2 - 1).toFixed(2);
-                
                 particle.addEventListener('mouseenter', function(e) {
                     e.stopPropagation();
                     explodeParticle(this);
@@ -111,9 +107,6 @@
                 particle.dataset.x = x;
                 particle.dataset.y = y;
                 particle.dataset.hue = hue;
-                particle.dataset.speed = (Math.random() * 2 - 1).toFixed(2);
-                particle.dataset.velX = (Math.random() * 2 - 1).toFixed(2);
-                particle.dataset.velY = (Math.random() * 2 - 1).toFixed(2);
                 
                 particleContainer.appendChild(particle);
                 
@@ -152,10 +145,7 @@
                     
                     const newHue = (hue + Math.random() * 60 - 30) % 360;
                     
-                    const childParticle = createParticle(newSize, newX, newY, newHue);
-                    
-                    childParticle.dataset.velX = (Math.cos(angle) * 2 + Math.random() - 0.5).toFixed(2);
-                    childParticle.dataset.velY = (Math.sin(angle) * 2 + Math.random() - 0.5).toFixed(2);
+                    createParticle(newSize, newX, newY, newHue);
                 }
                 
                 setTimeout(() => {
@@ -163,69 +153,6 @@
                     updateParticleCount();
                 }, 500); 
             }
-            
-            function moveParticles() {
-                document.querySelectorAll('.particle:not(.exploding)').forEach(particle => {
-                    const rect = particle.getBoundingClientRect();
-                    const x = rect.left;
-                    const y = rect.top;
-                    
-                    let velX = parseFloat(particle.dataset.velX || 0);
-                    let velY = parseFloat(particle.dataset.velY || 0);
-                    
-                    particle.style.left = `${(x + velX) / window.innerWidth * 100}%`;
-                    particle.style.top = `${(y + velY) / window.innerHeight * 100}%`;
-                    
-                    if (x < 0 || x > window.innerWidth - rect.width) {
-                        particle.dataset.velX = (-velX).toFixed(2);
-                    }
-                    
-                    if (y < 0 || y > window.innerHeight - rect.height) {
-                        particle.dataset.velY = (-velY).toFixed(2);
-                    }
-                });
-            }
-            
-            document.addEventListener('mousemove', (e) => {
-                const mouseX = e.clientX;
-                const mouseY = e.clientY;
-                
-                document.querySelectorAll('.particle:not(.exploding)').forEach(particle => {
-                    const speed = parseFloat(particle.dataset.speed || 0);
-                    
-                    const rect = particle.getBoundingClientRect();
-                    const particleX = rect.left + rect.width / 2;
-                    const particleY = rect.top + rect.height / 2;
-                    
-                    const dx = mouseX - particleX;
-                    const dy = mouseY - particleY;
-                    const distance = Math.sqrt(dx * dx + dy * dy);
-                    
-                    const maxDistance = 300; 
-                    
-                    if (distance < maxDistance) {
-                        const influence = 1 - distance / maxDistance;
-                        const moveX = dx * influence * speed * 0.1;
-                        const moveY = dy * influence * speed * 0.1;
-                        
-                        particle.style.transform = `translate(${moveX}px, ${moveY}px)`;
-                    }
-                });
-            });
-            
-            setInterval(() => {
-                moveParticles();
-                
-                const currentCount = document.querySelectorAll('.particle').length;
-                
-                if (currentCount < 600) {
-                    const size = 10 + Math.random() * 20; 
-                    const x = Math.random() * 100;
-                    const y = Math.random() * 100;
-                    const hue = Math.random() * 360;
-                    createParticle(size, x, y, hue);
-                }
-            }, 100);
         });
     </script>
 </body>
