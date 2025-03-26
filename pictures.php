@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="assets/css/alt.css">
+    <link rel="stylesheet" href="assets/css/main.css">
     <title>My Pictures</title>
 </head>
 <body>
@@ -43,7 +43,6 @@
             <a href="index.html" style="color: white;">Home</a>
         </h2>
     </div>
-    <script src="assets/js/alt.js"></script>
+    <script src="assets/js/main.js"></script>
 </body>
 </html>
-<!-- -->

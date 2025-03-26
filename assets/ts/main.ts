@@ -264,6 +264,57 @@ document.addEventListener("DOMContentLoaded", function(){
         }
     }
 
+    class PictureGlow {
+        containers: NodeListOf<Element>;
+
+        constructor() {
+            this.containers = document.querySelectorAll('.picture-container');
+            this.setupGlowEffects();
+        }
+
+        setupGlowEffects(): void {
+            this.containers.forEach(container => {
+                const canvas = container.querySelector('.glow') as HTMLCanvasElement;
+                if (!canvas) return;
+                
+                const ctx = canvas.getContext('2d');
+                if (!ctx) return;
+                
+                const updateCanvasSize = () => {
+                    canvas.width = (container as HTMLElement).offsetWidth;
+                    canvas.height = (container as HTMLElement).offsetHeight;
+                };
+                
+                updateCanvasSize();
+                window.addEventListener('resize', updateCanvasSize);
+
+                (container as HTMLElement).addEventListener('mousemove', ((e: MouseEvent) => {
+                    const rect = (container as HTMLElement).getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    
+                    const gradient = ctx.createRadialGradient(
+                        x, y, 0,
+                        x, y, 100
+                    );
+                    
+                    gradient.addColorStop(0, 'rgba(255, 255, 255, 0.2)');
+                    gradient.addColorStop(0.5, 'rgba(255, 255, 255, 0.1)');
+                    gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+                    
+                    ctx.fillStyle = gradient;
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                }) as EventListener);
+
+                container.addEventListener('mouseleave', () => {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                });
+            });
+        }
+    }
+
     class TypeWriter {
         titleElement: HTMLElement;
         contentElement: HTMLElement;
@@ -309,6 +360,7 @@ document.addEventListener("DOMContentLoaded", function(){
     const particles = new ParticleSystem();
     const trail = new Trail();
     const typeWriter = new TypeWriter();
+    const pictureGlow = new PictureGlow(); 
     
     window.addEventListener('resize', () => {
         if (particles.resizeTimeout) {

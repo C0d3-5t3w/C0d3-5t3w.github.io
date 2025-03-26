@@ -87,3 +87,64 @@ button {
     background-color: #ff0000;
   }
 }
+
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-auto-rows: minmax(200px, auto);
+  gap: 1rem;
+  padding: 20px;
+  width: 100%;
+  max-width: 1200px;
+  margin: 20px auto;
+  z-index: 2;
+  position: relative;
+}
+
+.picture-container {
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px;
+  background: var(--dark-bg);
+  transition: transform 0.3s ease;
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &.small {
+    grid-row: span 1;
+    grid-column: span 1;
+  }
+
+  &.medium {
+    grid-row: span 2;
+    grid-column: span 2;
+  }
+
+  &.large {
+    grid-row: span 3;
+    grid-column: span 3;
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    object-fit: contain;
+  }
+
+  &:hover {
+    transform: scale(1.02);
+  }
+}
+
+.glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
