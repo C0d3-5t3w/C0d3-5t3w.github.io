@@ -67,19 +67,6 @@ $random_quote = $quotes[array_rand($quotes)];
         <link rel="stylesheet" href="assets/css/main.css">
         <title>C0D3-5T3W</title>
         <style>
-            .quote-button {
-                background: rgba(251, 42, 255, 0.4);
-                border: 1px solid white;
-                color: white;
-                padding: 8px 15px;
-                border-radius: 5px;
-                cursor: pointer;
-                margin-top: 10px;
-                transition: all 0.3s;
-            }
-            .quote-button:hover {
-                background: rgba(251, 42, 255, 0.7);
-            }
             .quote-of-the-day {
                 position: relative;
             }
@@ -96,7 +83,7 @@ $random_quote = $quotes[array_rand($quotes)];
             }
         </style>
     </head>
-    <body>
+    <body class="fog-container">
         <div class="content">
             <img src="assets/images/THELOGO.jpg" alt="5T3W Logo" class="logo">
             <h1>
