@@ -6,15 +6,6 @@
         <link rel="stylesheet" href="assets/css/main.css">
         <title>Advice</title>
         <style>
-            body {
-                font-family: Arial, sans-serif;
-                background-color: #f4f4f4;
-                margin: 0;
-                padding: 20px;
-            }
-            h1 {
-                color: #333;
-            }
             ul {
                 list-style: none;
                 padding: 0;
@@ -37,7 +28,12 @@
                 "Comment your code to explain complex logic.",
                 "Use version control systems like Git.",
                 "Keep learning new programming languages and frameworks.",
-                "Debug your code using tools and breakpoints."
+                "Debug your code using tools and breakpoints.",
+                "Write unit tests to ensure code reliability.",
+                "Follow coding standards and best practices.",
+                "Use meaningful variable and function names.",
+                "Refactor code regularly to improve its structure.",
+                "Participate in code reviews to learn and share knowledge."
             ];
             foreach ($coding_advice as $advice) {
                 echo "<li>$advice</li>";
@@ -53,7 +49,12 @@
                 "Use fresh ingredients for better flavor.",
                 "Keep your knives sharp for safety and efficiency.",
                 "Clean as you go to keep your workspace tidy.",
-                "Experiment with spices and herbs to enhance flavors."
+                "Experiment with spices and herbs to enhance flavors.",
+                "Read the entire recipe before starting.",
+                "Preheat your oven for consistent results.",
+                "Use a meat thermometer to ensure proper cooking.",
+                "Let meat rest before slicing to retain juices.",
+                "Organize your ingredients before cooking."
             ];
             foreach ($cooking_advice as $advice) {
                 echo "<li>$advice</li>";
@@ -69,7 +70,12 @@
                 "Layer your sounds to create a rich texture.",
                 "Use automation to add dynamics to your tracks.",
                 "Listen to a wide range of dubstep artists for inspiration.",
-                "Practice sound design to create unique sounds."
+                "Practice sound design to create unique sounds.",
+                "Focus on creating powerful basslines.",
+                "Use sidechain compression for that pumping effect.",
+                "Experiment with different tempos and rhythms.",
+                "Add variations to keep your tracks interesting.",
+                "Collaborate with other artists to learn new techniques."
             ];
             foreach ($dubstep_advice as $advice) {
                 echo "<li>$advice</li>";
