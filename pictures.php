@@ -58,8 +58,8 @@ $spotlight = $images[array_rand($images)];
     <title>My Pictures</title>
     <style>
         body {
-            background: radial-gradient(circle, rgba(251,42,255,0.4), rgba(0,0,0,0.9));
-            overflow: hidden;
+            background: linear-gradient(45deg, purple, teal, blue);
+            overflow: auto;
         }
         .spotlight {
             position: relative;
@@ -96,20 +96,6 @@ $spotlight = $images[array_rand($images)];
             color: #fb2aff;
             margin-bottom: 10px;
             font-weight: bold;
-        }
-        .refresh-button {
-            background: rgba(251, 42, 255, 0.4);
-            border: 1px solid white;
-            color: white;
-            padding: 8px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            display: block;
-            margin: 10px auto;
-            transition: all 0.3s;
-        }
-        .refresh-button:hover {
-            background: rgba(251, 42, 255, 0.7);
         }
         .gallery {
             display: flex;
@@ -168,9 +154,6 @@ $spotlight = $images[array_rand($images)];
             <div class="spotlight-info">
                 <div class="spotlight-title">✨ Spotlight Image ✨</div>
                 <p><?php echo $spotlight['description']; ?></p>
-                <form method="get">
-                    <button type="submit" class="refresh-button">New Random Spotlight</button>
-                </form>
             </div>
         </div>
         
