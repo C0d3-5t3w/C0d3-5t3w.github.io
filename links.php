@@ -46,5 +46,8 @@ header("Expires: Sat, 26 Jul 1997 05:00:00 GMT");
             <li><a href="https://m.soundcloud.com/brandon-stewart-792686080">SoundCloud Profile</a></li>
             <!-- <li><a href="link">text</a></li> for easy copy and paste since I keep editing from mobile -->
         </ul>
+        <h2>
+            <a href="index.html" style="color: white;">Home</a>
+        </h2>
     </body>
 </html>
