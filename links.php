@@ -43,6 +43,8 @@ header("Expires: Sat, 26 Jul 1997 05:00:00 GMT");
         <ul>
             <li><a href="https://github.com/C0d3-5t3w">GitHub Profile</a></li>
             <li><a href="https://github.com/C0d3-5t3w/c0d3-5t3w.github.io">GitHub Repository</a></li>
+            <li><a href="https://m.soundcloud.com/brandon-stewart-792686080">SoundCloud Profile</a></li>
+            <!-- <li><a href="link">text</a></li> for easy copy and paste since I keep editing from mobile -->
         </ul>
     </body>
 </html>
