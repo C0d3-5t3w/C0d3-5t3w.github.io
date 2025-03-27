@@ -48,7 +48,7 @@ $thai_recipes = [
             }
             li {
                 background: lightgray;
-                color: white;
+                color: black;
                 margin: 10px 0;
                 padding: 15px;
                 border-radius: 5px;
