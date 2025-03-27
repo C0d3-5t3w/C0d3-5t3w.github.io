@@ -99,7 +99,7 @@
                 });
             });
             
-            function createParticle(size, x, y, hue) {
+            function createParticle(size, x, y, hue, angle = null, distance = null) {
                 const particle = document.createElement('div');
                 particle.className = 'particle';
                 particle.style.width = `${size}px`;
@@ -112,6 +112,8 @@
                 particle.dataset.x = x;
                 particle.dataset.y = y;
                 particle.dataset.hue = hue;
+                particle.dataset.angle = angle;
+                particle.dataset.distance = distance;
                 
                 particleContainer.appendChild(particle);
                 
@@ -157,13 +159,65 @@
                     
                     const newHue = (hue + Math.random() * 60 - 30) % 360;
                     
-                    createParticle(newSize, newX, newY, newHue);
+                    const newParticle = createParticle(newSize, newX, newY, newHue, angle, distance);
+                    moveParticle(newParticle);
                 }
                 
                 setTimeout(() => {
                     particle.remove();
                     updateParticleCount();
                 }, 500); 
+            }
+
+            function moveParticle(particle) {
+                const angle = parseFloat(particle.dataset.angle);
+                const distance = parseFloat(particle.dataset.distance);
+                const speed = 0.1;
+
+                function move() {
+                    const x = parseFloat(particle.dataset.x);
+                    const y = parseFloat(particle.dataset.y);
+                    const newX = x + Math.cos(angle) * speed;
+                    const newY = y + Math.sin(angle) * speed;
+
+                    particle.style.left = `${newX}%`;
+                    particle.style.top = `${newY}%`;
+
+                    particle.dataset.x = newX;
+                    particle.dataset.y = newY;
+
+                    if (!checkCollision(particle)) {
+                        requestAnimationFrame(move);
+                    }
+                }
+
+                move();
+            }
+
+            function checkCollision(particle) {
+                const x = parseFloat(particle.dataset.x);
+                const y = parseFloat(particle.dataset.y);
+                const size = parseFloat(particle.dataset.size);
+
+                let collided = false;
+                particles.forEach(other => {
+                    if (other !== particle) {
+                        const otherX = parseFloat(other.dataset.x);
+                        const otherY = parseFloat(other.dataset.y);
+                        const otherSize = parseFloat(other.dataset.size);
+
+                        const dx = otherX - x;
+                        const dy = otherY - y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+
+                        if (distance < (size / 2 + otherSize / 2)) {
+                            collided = true;
+                            explodeParticle(other);
+                        }
+                    }
+                });
+
+                return collided;
             }
 
             document.addEventListener('touchstart', function(e) {
