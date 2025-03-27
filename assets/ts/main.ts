@@ -126,7 +126,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
         checkCollision(p1: Particle, p2: Particle): void {
             const dx = p2.x - p1.x;
-            const dy = p2.y - p1.y;
+            const dy = p1.y - p2.y;
             const distance = Math.sqrt(dx * dx + dy * dy);
 
             if (distance < p1.radius + p2.radius) {
@@ -403,12 +403,12 @@ document.addEventListener("DOMContentLoaded", function(){
 
     let heading = document.querySelector("h1") as HTMLHeadingElement;
     heading.addEventListener("click", function(){
-        heading.textContent = "🍌";
+        heading.textContent = "Y0U'R3";
     });
 
     let Heading = document.querySelector("h2") as HTMLHeadingElement;
     Heading.addEventListener("click", function(){
-        Heading.textContent = "🥦";
+        Heading.textContent = "AMAZ1NG!";
     });
 
     let githubButton = document.createElement("button");
