@@ -53,6 +53,17 @@
             font-family: monospace;
             z-index: 1000;
         }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(255, 0, 0, 0.5), rgba(0, 255, 255, 0.5), rgba(255, 255, 0, 0.5));
+            z-index: -1;
+            pointer-events: none;
+        }
     </style>
 </head>
 <body>
@@ -92,6 +103,8 @@
             const particles = document.querySelectorAll('.particle');
             const particleContainer = document.getElementById('particle-container');
             const particleCountDisplay = document.getElementById('particle-count');
+            const screenWidth = window.innerWidth;
+            const screenHeight = window.innerHeight;
             
             function updateParticleCount() {
                 particleCountDisplay.textContent = document.querySelectorAll('.particle').length;
@@ -151,7 +164,6 @@
 
                 console.log('Exploding particle:', size, x, y, hue);
                 
-                // Flash effect
                 const flash = document.createElement('div');
                 flash.className = 'flash';
                 flash.style.width = `${size}px`;
@@ -169,15 +181,15 @@
                 
                 particle.classList.add('exploding');
                 
-                const numChildren = Math.min(Math.floor(size / 2), 5); // Cap to 5 children
+                const numChildren = Math.min(Math.floor(size / 2), 5);
                 
                 for (let i = 0; i < numChildren; i++) {
                     const newSize = Math.max(size / 2, 5); 
                     const angle = (i / numChildren) * Math.PI * 2; 
-                    const distance = size / 120;
+                    const distance = Math.min(screenWidth, screenHeight) / 2;
                     
-                    const newX = x + (Math.cos(angle) * distance * 0.1) + (Math.random() * 2 - 1);
-                    const newY = y + (Math.sin(angle) * distance * 0.1) + (Math.random() * 2 - 1);
+                    const newX = x + (Math.cos(angle) * distance * 0.01);
+                    const newY = y + (Math.sin(angle) * distance * 0.01);
                     
                     const newHue = (hue + Math.random() * 60 - 30) % 360;
                     
@@ -194,7 +206,7 @@
                 const angle = parseFloat(particle.dataset.angle);
                 const distance = parseFloat(particle.dataset.distance);
                 let speed = 0.1;
-                const deceleration = speed / (5 * 60); // Slow down over 5 seconds
+                const deceleration = speed / (5 * 60); 
 
                 function move() {
                     if (speed <= 0) return;
@@ -212,39 +224,30 @@
 
                     speed -= deceleration;
 
-                    if (!checkCollision(particle)) {
-                        requestAnimationFrame(move);
-                    }
+                    requestAnimationFrame(move);
                 }
 
                 move();
             }
 
-            function checkCollision(particle) {
-                const x = parseFloat(particle.dataset.x);
-                const y = parseFloat(particle.dataset.y);
-                const size = parseFloat(particle.dataset.size);
-
-                let collided = false;
-                particles.forEach(other => {
-                    if (other !== particle) {
-                        const otherX = parseFloat(other.dataset.x);
-                        const otherY = parseFloat(other.dataset.y);
-                        const otherSize = parseFloat(other.dataset.size);
-
-                        const dx = otherX - x;
-                        const dy = otherY - y;
-                        const distance = Math.sqrt(dx * dx + dy * dy);
-
-                        if (distance < (size / 2 + otherSize / 2)) {
-                            collided = true;
-                            explodeParticle(other);
-                        }
+            function checkAndRespawnParticles() {
+                const particleCount = document.querySelectorAll('.particle').length;
+                if (particleCount < 50) {
+                    for (let i = 0; i < 10; i++) {
+                        const size = rand(10, 30); 
+                        const x = rand(0, 100);
+                        const y = rand(0, 100);
+                        const hue = rand(0, 360);
+                        createParticle(size, x, y, hue);
                     }
-                });
-
-                return collided;
+                }
             }
+
+            function rand(min, max) {
+                return Math.floor(Math.random() * (max - min + 1)) + min;
+            }
+
+            setInterval(checkAndRespawnParticles, 3000);
 
             document.addEventListener('touchstart', function(e) {
                 const touch = e.touches[0];
