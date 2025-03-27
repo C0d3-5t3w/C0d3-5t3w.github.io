@@ -32,9 +32,17 @@ header("Expires: Sat, 26 Jul 1997 05:00:00 GMT");
                 border-radius: 5px;
                 box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             }
+            a {
+                color: black;
+                text-decoration: none;
+            }
         </style>
     </head>
     <body>
-        <h1>Personal links:</h1>
+        <h1>Personal Links:</h1>
+        <ul>
+            <li><a href="https://github.com/C0d3-5t3w">GitHub Profile</a></li>
+            <li><a href="https://github.com/C0d3-5t3w/c0d3-5t3w.github.io">GitHub Repository</a></li>
+        </ul>
     </body>
 </html>
