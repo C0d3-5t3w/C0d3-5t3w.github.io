@@ -194,6 +194,9 @@ $random_quote = $quotes[array_rand($quotes)];
                 <a href="pictures.html" style="color: white;">Pictures</a>                
             </h2>
             <h2>
+                <a href="advice.html" style="color: white;">Advice</a>
+            </h2>
+            <h2>
                 <a href="FlappyZig.html" style="color: white;">Play FlappyZig</a>
             </h2>
             <h2>
