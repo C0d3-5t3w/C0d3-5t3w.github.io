@@ -57,6 +57,10 @@ $spotlight = $images[array_rand($images)];
     <link rel="stylesheet" href="assets/css/main.css">
     <title>My Pictures</title>
     <style>
+        body {
+            background: radial-gradient(circle, rgba(251,42,255,0.4), rgba(0,0,0,0.9));
+            overflow: hidden;
+        }
         .spotlight {
             position: relative;
             margin: 20px auto;
@@ -107,6 +111,52 @@ $spotlight = $images[array_rand($images)];
         .refresh-button:hover {
             background: rgba(251, 42, 255, 0.7);
         }
+        .gallery {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+        .picture-container {
+            position: relative;
+            border-radius: 15px;
+            overflow: hidden;
+            transition: transform 0.6s;
+        }
+        .picture-container img {
+            width: 100%;
+            display: block;
+        }
+        .picture-container.small {
+            width: 100px;
+        }
+        .picture-container.medium {
+            width: 200px;
+        }
+        .picture-container.large {
+            width: 300px;
+        }
+        .picture-container:after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            box-shadow: 0 0 15px rgba(251, 42, 255, 0.6);
+            pointer-events: none;
+        }
+        .picture-container.spin {
+            animation: spin 1s linear;
+        }
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
     </style>
 </head>
 <body>
@@ -125,39 +175,27 @@ $spotlight = $images[array_rand($images)];
         </div>
         
         <div class="gallery">
-            <div class="picture-container small">
-                <img src="assets/images/z1.png" alt="Ziggy!">
-                <!-- <canvas class="glow"></canvas> -->
-            </div>
-            <div class="picture-container medium">
-                <img src="assets/images/z3.jpg" alt="Ziggy!">
-                <!-- <canvas class="glow"></canvas> -->
-            </div>
-            <div class="picture-container small">
-                <img src="assets/images/z2.png" alt="Ziggy!">
-                <!-- <canvas class="glow"></canvas> -->
-            </div>
-            <div class="picture-container small">
-                <img src="assets/images/p1.jpeg" alt="Patience!">
-                <!-- <canvas class="glow"></canvas> -->
-            </div>
-            <div class="picture-container medium">
-                <img src="assets/images/v1.jpg" alt="View!">
-                <!-- <canvas class="glow"></canvas> -->
-            </div>              
-            <div class="picture-container small">
-                <img src="assets/images/p2.jpeg" alt="Patience!">
-                <!-- <canvas class="glow"></canvas> -->
-            </div>
-            <div class="picture-container large">
-                <img src="assets/images/l1.jpg" alt="Logo!">
-                <!-- <canvas class="glow"></canvas> -->
-            </div>            
+            <?php foreach ($images as $image) {
+                if ($image['src'] !== $spotlight['src']) { ?>
+                    <div class="picture-container <?php echo $image['size']; ?>">
+                        <img src="<?php echo $image['src']; ?>" alt="<?php echo $image['alt']; ?>">
+                    </div>
+                <?php } 
+            } ?>
         </div>
         <h2>
             <a href="index.html" style="color: white;">Home</a>
         </h2>
     </div>
-    <script src="assets/js/main.js"></script>
+    <script>
+        document.querySelectorAll('.picture-container').forEach(container => {
+            container.addEventListener('click', () => {
+                container.classList.add('spin');
+                setTimeout(() => {
+                    container.classList.remove('spin');
+                }, 1000);
+            });
+        });
+    </script>
 </body>
 </html>
