@@ -150,10 +150,10 @@
                 for (let i = 0; i < numChildren; i++) {
                     const newSize = Math.max(size / 2, 5); 
                     const angle = (i / numChildren) * Math.PI * 2; 
-                    const distance = size / 2; 
+                    const distance = size / 12;
                     
-                    const newX = x + (Math.cos(angle) * distance * 0.1) + (Math.random() * 5 - 2.5);
-                    const newY = y + (Math.sin(angle) * distance * 0.1) + (Math.random() * 5 - 2.5);
+                    const newX = x + (Math.cos(angle) * distance * 0.1) + (Math.random() * 2 - 1);
+                    const newY = y + (Math.sin(angle) * distance * 0.1) + (Math.random() * 2 - 1);
                     
                     const newHue = (hue + Math.random() * 60 - 30) % 360;
                     
