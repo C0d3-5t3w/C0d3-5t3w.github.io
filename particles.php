@@ -60,7 +60,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(to bottom, rgba(255, 0, 0, 0.5), rgba(0, 255, 255, 0.5), rgba(255, 255, 0, 0.5));
+            background: linear-gradient(to bottom, black, white, gray);
             z-index: -1;
             pointer-events: none;
         }
