@@ -205,6 +205,9 @@ $random_quote = $quotes[array_rand($quotes)];
             <h2>
                 <a href="particles.html" style="color: white;">Particles</a>
             </h2>
+            <h2>
+                <a href="links.html" style="color: white;">Links</a>
+            </h2>
             <h1>
                 My music:
             </h1>
