@@ -6,6 +6,9 @@
         <link rel="stylesheet" href="assets/css/main.css">
         <title>Advice</title>
         <style>
+            body {
+                background-color: black;
+            }
             ul {
                 list-style: none;
                 padding: 0;
@@ -82,6 +85,5 @@
             }
             ?>
         </ul>
-        <script src="assets/js/main.js"></script>
     </body>
 </html>
