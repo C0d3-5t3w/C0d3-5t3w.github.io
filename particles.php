@@ -23,6 +23,17 @@
             animation: explode 0.5s forwards !important;
             pointer-events: none;
         }
+        .flash {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            opacity: 0;
+            animation: flash 0.1s forwards;
+        }
+        @keyframes flash {
+            0% { opacity: 1; }
+            100% { opacity: 0; }
+        }
         .content {
             position: relative;
             z-index: 100;
@@ -128,6 +139,7 @@
                 });
                 
                 updateParticleCount();
+                moveParticle(particle);
                 return particle;
             }
             
@@ -139,6 +151,16 @@
 
                 console.log('Exploding particle:', size, x, y, hue);
                 
+                // Flash effect
+                const flash = document.createElement('div');
+                flash.className = 'flash';
+                flash.style.width = `${size}px`;
+                flash.style.height = `${size}px`;
+                flash.style.left = `${x}%`;
+                flash.style.top = `${y}%`;
+                particleContainer.appendChild(flash);
+                setTimeout(() => flash.remove(), 100);
+
                 if (size < 5) {
                     particle.remove();
                     updateParticleCount();
@@ -147,7 +169,7 @@
                 
                 particle.classList.add('exploding');
                 
-                const numChildren = Math.min(Math.floor(size / 2), 8);
+                const numChildren = Math.min(Math.floor(size / 2), 5); // Cap to 5 children
                 
                 for (let i = 0; i < numChildren; i++) {
                     const newSize = Math.max(size / 2, 5); 
@@ -159,8 +181,7 @@
                     
                     const newHue = (hue + Math.random() * 60 - 30) % 360;
                     
-                    const newParticle = createParticle(newSize, newX, newY, newHue, angle, distance);
-                    moveParticle(newParticle);
+                    createParticle(newSize, newX, newY, newHue, angle, distance);
                 }
                 
                 setTimeout(() => {
@@ -172,9 +193,12 @@
             function moveParticle(particle) {
                 const angle = parseFloat(particle.dataset.angle);
                 const distance = parseFloat(particle.dataset.distance);
-                const speed = 0.1;
+                let speed = 0.1;
+                const deceleration = speed / (5 * 60); // Slow down over 5 seconds
 
                 function move() {
+                    if (speed <= 0) return;
+                    
                     const x = parseFloat(particle.dataset.x);
                     const y = parseFloat(particle.dataset.y);
                     const newX = x + Math.cos(angle) * speed;
@@ -185,6 +209,8 @@
 
                     particle.dataset.x = newX;
                     particle.dataset.y = newY;
+
+                    speed -= deceleration;
 
                     if (!checkCollision(particle)) {
                         requestAnimationFrame(move);
