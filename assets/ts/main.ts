@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", function(){
         constructor(x: number, y: number) {
             this.x = x;
             this.y = y;
-            this.chars = ['5', 'T', '3', 'W'];
+            this.chars = ['5', 'T', '3', 'W', '!', '?', '¿'];
             this.char = this.chars[Math.floor(Math.random() * this.chars.length)];
             this.vx = (Math.random() - 0.5) * 2;
             this.vy = (Math.random() - 0.5) * 2;
