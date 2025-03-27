@@ -54,15 +54,15 @@ $dubstep_advice = [
                 padding: 20px;
             }
             h1 {
-                color: #fb2aff;
+                color: white;
             }
             ul {
                 list-style: none;
                 padding: 0;
             }
             li {
-                background: #fff;
-                color: black;
+                background: lightgray;
+                color: white;
                 margin: 10px 0;
                 padding: 15px;
                 border-radius: 5px;
