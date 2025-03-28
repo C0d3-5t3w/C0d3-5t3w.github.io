@@ -134,6 +134,18 @@ $random_quote = $quotes[array_rand($quotes)];
                 border: 1px solid var(--primary-color);
                 color: var(--primary-color);
             }
+            .typing-content {
+                opacity: 0;
+                transition: opacity 0.5s ease;
+            }
+            .typing-text {
+                opacity: 0;
+                transition: opacity 0.5s ease;
+                margin: 8px 0;
+            }
+            .typing-text.visible {
+                opacity: 1;
+            }
         </style>
     </head>
     <body>

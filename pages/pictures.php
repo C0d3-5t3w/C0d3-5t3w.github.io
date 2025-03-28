@@ -185,6 +185,6 @@ $spotlight = $images[array_rand($images)];
             });
         });
     </script>
-    <script src="assets/js/alt.js"></script>
+    <script src="../assets/js/alt.js"></script>
 </body>
 </html>

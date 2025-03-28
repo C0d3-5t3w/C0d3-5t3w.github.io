@@ -66,6 +66,6 @@ header("Expires: Sat, 26 Jul 1997 05:00:00 GMT");
         <h2>
             <a href="../index.html" style="color: white;">Home</a>
         </h2>
-        <script src="assets/js/alt.js"></script>
+        <script src="../assets/js/alt.js"></script>
     </body>
 </html>
