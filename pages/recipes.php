@@ -169,7 +169,7 @@ $thai_recipes = [
             }
         </style>
     </head>
-    <body>
+    <body class="content">
         <h1>Thai Recipes</h1>
         <ul id="thai-recipes"></ul>
         <h2>

@@ -62,7 +62,7 @@ header("Expires: Sat, 26 Jul 1997 05:00:00 GMT");
         }
     </style>
 </head>
-<body>
+<body class="content">
     <div id="particle-stats">Particles: <span id="particle-count">0</span></div>
     <div id="particle-container">
         <?php

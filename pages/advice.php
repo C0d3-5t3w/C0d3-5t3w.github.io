@@ -85,7 +85,7 @@ $dubstep_advice = [
             }
         </style>
     </head>
-    <body>
+    <body class="content">
         <h1>Coding Advice</h1>
         <ul id="coding-advice"></ul>
 

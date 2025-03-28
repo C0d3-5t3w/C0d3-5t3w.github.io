@@ -55,7 +55,7 @@ header("Expires: Sat, 26 Jul 1997 05:00:00 GMT");
             }
         </style>
     </head>
-    <body>
+    <body class="content">
         <h1>Personal Links:</h1>
         <ul>
             <li><a href="https://github.com/C0d3-5t3w">GitHub Profile</a></li>
