@@ -205,6 +205,7 @@ $random_quote = $quotes[array_rand($quotes)];
                     </p>
                 </div>
             </h3>
+            <!--
             <h2>
                 <a href="pages/pictures.html" style="color: white;">Pictures</a>                
             </h2>
@@ -223,6 +224,7 @@ $random_quote = $quotes[array_rand($quotes)];
             <h2>
                 <a href="pages/links.html" style="color: white;">Links</a>
             </h2>
+            -->
             <h1>
                 My music:
             </h1>
@@ -240,5 +242,6 @@ $random_quote = $quotes[array_rand($quotes)];
             </div>
         </div>
         <script src="assets/js/main.js"></script>
+        <script src="assets/js/dropdown.js"></script>
     </body>
 </html>

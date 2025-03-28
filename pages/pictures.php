@@ -150,7 +150,7 @@ $spotlight = $images[array_rand($images)];
         }
     </style>
 </head>
-<body class="content">
+<body>
     <div class="content">
         <h1>My Pictures</h1>
         

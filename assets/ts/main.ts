@@ -1,4 +1,14 @@
 document.addEventListener("DOMContentLoaded", function(){
+    const flashElement = document.createElement('div');
+    flashElement.className = 'page-load-flash';
+    document.body.appendChild(flashElement);
+    
+    setTimeout(() => {
+        if (document.body.contains(flashElement)) {
+            document.body.removeChild(flashElement);
+        }
+    }, 800);
+
     class Particle {
         x: number;
         y: number;
