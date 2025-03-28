@@ -156,13 +156,13 @@ $random_quote = $quotes[array_rand($quotes)];
                         -----------------------------
                     </p>
                     <p class="typing-text">
-                        I am currently learning Golang/C and JavaScript/Typescript.
+                        I am currently learning Golang, Zig, and Typescript.
                     </p>
                     <p class="typing-text">
                         -----------------------------
                     </p>
                     <p class="typing-text">
-                        I grew up using a lot of Python because of Raspberry Pi's.
+                        I grew up using a lot of Bash, Python, and C because of Raspberry Pi's.
                     </p>
                     <p class="typing-text">
                         -----------------------------

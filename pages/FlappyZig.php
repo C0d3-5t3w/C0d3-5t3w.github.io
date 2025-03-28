@@ -47,7 +47,7 @@
 <body>
     <a href="../index.html" class="home-link">Home</a>
     <div class="canvas">
-        <script src="assets/js/FlappyZig.js" class="canvas"></script>
+        <script src="../assets/js/FlappyZig.js" class="canvas"></script>
     </div>
     <div id="controls">
         <h3>Controls:</h3>
