@@ -296,10 +296,7 @@ $hispanic_recipes = [
                     </div>
                 <?php endforeach; ?>
             </div>
-            
-            <h2>
-                <script src="../assets/js/altdropdown.js"></script>
-            </h2>
+            <script src="../assets/js/altdropdown.js"></script>
         </div>
         <script src="../assets/js/alt.js"></script>
     </body>

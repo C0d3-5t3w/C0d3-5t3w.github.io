@@ -82,9 +82,7 @@ $spotlight = $images[array_rand($images)];
                 } ?>
             </div>
         </div>
-        <h2>
-            <script src="../assets/js/altdropdown.js"></script>
-        </h2>
+        <script src="../assets/js/altdropdown.js"></script>
     </div>
     <script>
         document.querySelectorAll('.gallery-item').forEach(container => {

@@ -68,9 +68,7 @@ $dubstep_advice = [
                 <h1 class="animated-heading">Dubstep Music Advice</h1>
                 <ul id="dubstep-advice" class="styled-list"></ul>
             </div>
-            <h2>
-                <script src="../assets/js/altdropdown.js"></script>
-            </h2>
+            <script src="../assets/js/altdropdown.js"></script>
         </div>
         <script>
             const codingAdvice = <?php echo json_encode($coding_advice); ?>;

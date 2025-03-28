@@ -102,9 +102,7 @@ header("Expires: Sat, 26 Jul 1997 05:00:00 GMT");
         ?>
     </div>
     <div class="content page-content">
-    <h2>
-        <script src="../assets/js/altdropdown.js"></script>
-    </h2>
+    <script src="../assets/js/altdropdown.js"></script>
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', function() {

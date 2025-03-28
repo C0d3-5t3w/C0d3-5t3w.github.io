@@ -12,9 +12,7 @@ header("Expires: Sat, 26 Jul 1997 05:00:00 GMT");
     <title>FlappyZig Game</title>
 </head>
 <body>
-    <h2>
-        <script src="../assets/js/altdropdown.js"></script>
-    </h2>
+    <script src="../assets/js/altdropdown.js"></script>
     <div class="game-container">
         <div class="game-overlay"></div>
         <div class="canvas">

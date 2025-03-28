@@ -21,9 +21,7 @@ header("Expires: Sat, 26 Jul 1997 05:00:00 GMT");
                     <li><a href="https://m.soundcloud.com/brandon-stewart-792686080" class="enhanced-link">SoundCloud Profile</a></li>
                 </ul>
             </div>
-            <h2>
-                <script src="../assets/js/altdropdown.js"></script>
-            </h2>
+            <script src="../assets/js/altdropdown.js"></script>
         </div>
         <script src="../assets/js/alt.js"></script>
     </body>
