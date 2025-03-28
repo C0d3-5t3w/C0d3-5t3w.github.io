@@ -119,6 +119,7 @@ $random_quote = $quotes[array_rand($quotes)];
         <style>
             .quote-of-the-day {
                 position: relative;
+                width: 100%;
             }
             #quote-text {
                 min-height: 80px;
@@ -127,9 +128,11 @@ $random_quote = $quotes[array_rand($quotes)];
                 flex-direction: column;
                 justify-content: center;
                 padding: 15px;
-                background: rgba(0, 0, 0, 0.2);
+                background: var(--accent-purple);
                 border-radius: 10px;
                 margin-top: 10px;
+                border: 1px solid var(--primary-color);
+                color: var(--primary-color);
             }
         </style>
     </head>

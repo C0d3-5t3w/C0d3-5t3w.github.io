@@ -133,26 +133,38 @@ $thai_recipes = [
         <title>Recipes</title>
         <style>
             body {
-                background-color: black;
-                color: white;
-                font-family: Arial, sans-serif;
                 margin: 0;
-                padding: 20px;
+                padding: 0;
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
+                color: var(--primary-color);
+                background-color: var(--background-color);
+                position: relative;
+                align-items: center;
             }
             h1 {
-                color: white;
+                color: var(--primary-color);
+                background-color: var(--accent-red);
+                border: 1px solid var(--primary-color);
+                padding: 10px;
+                margin: 20px 0;
+                width: 100%;
+                text-align: center;
             }
             ul {
                 list-style: none;
                 padding: 0;
+                width: 100%;
             }
             li {
-                background: lightgray;
-                color: black;
+                background: var(--dark-bg);
+                color: var(--primary-color);
                 margin: 10px 0;
                 padding: 15px;
                 border-radius: 5px;
-                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+                border: 1px solid var(--primary-color);
             }
         </style>
     </head>

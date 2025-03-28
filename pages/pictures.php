@@ -58,7 +58,9 @@ $spotlight = $images[array_rand($images)];
     <title>My Pictures</title>
     <style>
         body {
-            background: linear-gradient(45deg, purple, teal, blue);
+            background-color: var(--background-color);
+            color: var(--primary-color);
+            position: relative;
             overflow: auto;
         }
         .spotlight {
@@ -69,6 +71,7 @@ $spotlight = $images[array_rand($images)];
             border-radius: 15px;
             box-shadow: 0 0 25px rgba(255, 255, 255, 0.3);
             transition: all 0.5s ease;
+            border: 1px solid var(--primary-color);
         }
         .spotlight img {
             width: 100%;
@@ -79,8 +82,8 @@ $spotlight = $images[array_rand($images)];
             bottom: 0;
             left: 0;
             right: 0;
-            background: rgba(0, 0, 0, 0.7);
-            color: white;
+            background: var(--dark-bg);
+            color: var(--primary-color);
             padding: 15px;
             transform: translateY(100%);
             transition: transform 0.3s ease;
@@ -89,11 +92,11 @@ $spotlight = $images[array_rand($images)];
             transform: translateY(0);
         }
         .spotlight:hover {
-            box-shadow: 0 0 35px rgba(251, 42, 255, 0.6);
+            box-shadow: 0 0 35px var(--accent-purple);
             transform: scale(1.02);
         }
         .spotlight-title {
-            color: #fb2aff;
+            color: var(--accent-teal);
             margin-bottom: 10px;
             font-weight: bold;
         }
@@ -108,6 +111,8 @@ $spotlight = $images[array_rand($images)];
             border-radius: 15px;
             overflow: hidden;
             transition: transform 0.6s;
+            border: 1px solid var(--primary-color);
+            background: var(--dark-bg);
         }
         .picture-container img {
             width: 100%;
@@ -129,7 +134,7 @@ $spotlight = $images[array_rand($images)];
             left: 0;
             right: 0;
             bottom: 0;
-            box-shadow: 0 0 15px rgba(251, 42, 255, 0.6);
+            box-shadow: 0 0 15px var(--accent-purple);
             pointer-events: none;
         }
         .picture-container.spin {

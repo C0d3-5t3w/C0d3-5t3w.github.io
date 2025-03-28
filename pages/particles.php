@@ -13,6 +13,7 @@
             transition: transform 0.3s ease-out, background 0.3s ease;
             z-index: 10;
             cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
         @keyframes explode {
             0% { transform: scale(1) rotate(0deg); opacity: 1; }
@@ -25,7 +26,7 @@
         }
         .flash {
             position: absolute;
-            background: white;
+            background: var(--primary-color);
             border-radius: 50%;
             opacity: 0;
             animation: flash 0.1s forwards;
@@ -39,6 +40,7 @@
             z-index: 100;
         }
         body {
+            background-color: var(--background-color);
             overflow-x: hidden;
             min-height: 100vh;
         }
@@ -46,23 +48,13 @@
             position: fixed;
             bottom: 10px;
             right: 10px;
-            color: white;
-            background: linear-gradient(45deg, red, teal, gold);
+            color: var(--primary-color);
+            background: var(--accent-teal);
             padding: 10px;
             border-radius: 5px;
             font-family: monospace;
             z-index: 1000;
-        }
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(to bottom, black, white, gray);
-            z-index: -1;
-            pointer-events: none;
+            border: 1px solid var(--primary-color);
         }
     </style>
 </head>
