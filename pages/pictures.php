@@ -4,43 +4,43 @@ header("Expires: Sat, 26 Jul 1997 05:00:00 GMT");
 
 $images = [
     [
-        'src' => 'assets/images/z1.png',
+        'src' => '../assets/images/z1.png',
         'alt' => 'Ziggy!',
         'description' => 'Ziggy looking amazing as always.',
         'size' => 'small'
     ],
     [
-        'src' => 'assets/images/z3.jpg',
+        'src' => '../assets/images/z3.jpg',
         'alt' => 'Ziggy!',
         'description' => 'Ziggy in a relaxed mood.',
         'size' => 'medium'
     ],
     [
-        'src' => 'assets/images/z2.png',
+        'src' => '../assets/images/z2.png',
         'alt' => 'Ziggy!',
         'description' => 'Another wonderful Ziggy moment.',
         'size' => 'small'
     ],
     [
-        'src' => 'assets/images/p1.jpeg',
+        'src' => '../assets/images/p1.jpeg',
         'alt' => 'Patience!',
         'description' => 'Patience being patient as usual.',
         'size' => 'small'
     ],
     [
-        'src' => 'assets/images/v1.jpg',
+        'src' => '../assets/images/v1.jpg',
         'alt' => 'View!',
         'description' => 'A beautiful scenic view.',
         'size' => 'medium'
     ],
     [
-        'src' => 'assets/images/p2.jpeg',
+        'src' => '../assets/images/p2.jpeg',
         'alt' => 'Patience!',
         'description' => 'Another adorable picture of Patience.',
         'size' => 'small'
     ],
     [
-        'src' => 'assets/images/l1.jpg',
+        'src' => '../assets/images/l1.jpg',
         'alt' => 'Logo!',
         'description' => 'The awesome logo.',
         'size' => 'large'

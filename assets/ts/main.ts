@@ -382,7 +382,7 @@ document.addEventListener("DOMContentLoaded", function(){
         
         animateFog(): void {
             this.fogCorners.forEach((corner, index) => {
-                const pulseSpeed = 3000 + (index * 500); // Slightly different speeds for each corner
+                const pulseSpeed = 3000 + (index * 500); 
                 corner.style.animation = `fogPulse ${pulseSpeed}ms infinite alternate ease-in-out`;
             });
         }

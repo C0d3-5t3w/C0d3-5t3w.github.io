@@ -136,28 +136,28 @@ class Game {
         this.trailLength = 10;
 
         this.zigImg = new Image();
-        this.zigImg.src = 'assets/images/z1.png';
+        this.zigImg.src = '../assets/images/z1.png';
 
         this.bgImg = new Image();
-        this.bgImg.src = 'assets/images/bg1.png';
+        this.bgImg.src = '../assets/images/bg1.png';
 
         this.pipeImg = new Image();
-        this.pipeImg.src = 'assets/images/pip1.png';
+        this.pipeImg.src = '../assets/images/pip1.png';
 
         this.meowImg = new Image();
-        this.meowImg.src = 'assets/images/meow.png';
+        this.meowImg.src = '../assets/images/meow.png';
 
         this.noImg = new Image();
-        this.noImg.src = 'assets/images/no.png';
+        this.noImg.src = '../assets/images/no.png';
 
         this.stopImg = new Image();
-        this.stopImg.src = 'assets/images/stop.png'; 
+        this.stopImg.src = '../assets/images/stop.png'; 
 
         this.downImg = new Image();
-        this.downImg.src = 'assets/images/down.png';
+        this.downImg.src = '../assets/images/down.png';
 
         this.badImg = new Image();
-        this.badImg.src = 'assets/images/bad.png';
+        this.badImg.src = '../assets/images/bad.png';
 
         this.setupControls();
         window.addEventListener('resize', () => this.setupCanvas());
