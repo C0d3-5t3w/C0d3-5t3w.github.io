@@ -191,5 +191,6 @@ $thai_recipes = [
 
             populateRecipes(thaiRecipes, 'thai-recipes');
         </script>
+        <script src="assets/js/alt.js"></script>
     </body>
 </html>

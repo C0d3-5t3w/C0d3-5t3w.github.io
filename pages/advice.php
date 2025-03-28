@@ -115,5 +115,6 @@ $dubstep_advice = [
             populateAdvice(cookingAdvice, 'cooking-advice');
             populateAdvice(dubstepAdvice, 'dubstep-advice');
         </script>
+        <script src="assets/js/alt.js"></script>
     </body>
 </html>
