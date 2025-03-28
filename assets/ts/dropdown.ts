@@ -1,7 +1,7 @@
 class SiteMapDropdown {
-    private dropdown: HTMLElement;
-    private button: HTMLElement;
-    private content: HTMLElement;
+    private dropdown!: HTMLElement;
+    private button!: HTMLElement;
+    private content!: HTMLElement;
     private isOpen: boolean = false;
 
     constructor() {

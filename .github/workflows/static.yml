@@ -70,6 +70,11 @@ jobs:
             "include": ["./assets/ts/**/*"]
           }' > tsconfig.json
       
+      - name: List TypeScript files
+        run: |
+          echo "Found TypeScript files:"
+          find ./assets/ts -name "*.ts" | sort
+      
       - name: Compile TypeScript
         run: |
           mkdir -p assets/js
@@ -80,6 +85,11 @@ jobs:
           else
             echo "TypeScript compilation successful."
           fi
+          
+      - name: Verify JavaScript output
+        run: |
+          echo "Generated JavaScript files:"
+          find ./assets/js -name "*.js" | sort
           
       - name: Lint JavaScript
         run: |
@@ -136,4 +146,3 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-# <3
