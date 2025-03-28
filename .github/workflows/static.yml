@@ -114,12 +114,18 @@ jobs:
         run: |
           for file in assets/js/*.js; do
             if [ -f "$file" ]; then
+              echo "Minifying $file"
               npx terser "$file" \
                 --compress \
                 --mangle \
-                --source-map "content='inline',url='$(basename "$file").map'" \
+                --source-map "base='assets/js',root='assets/js',url='$(basename "$file").map'" \
                 --output "${file%.js}.min.js"
-              mv "${file%.js}.min.js}" "$file"
+              if [ -f "${file%.js}.min.js" ]; then
+                mv "${file%.js}.min.js" "$file"
+                echo "✅ Successfully minified $file"
+              else
+                echo "⚠️ Warning: Minification of $file may have failed, keeping original"
+              fi
             fi
           done
           
