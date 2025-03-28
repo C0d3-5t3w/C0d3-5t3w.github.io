@@ -149,7 +149,6 @@ button {
   z-index: 1;
 }
 
-/*
 .fog-container {
     position: fixed;
     top: 0;
@@ -162,29 +161,30 @@ button {
 
 .fog-corner {
     position: absolute;
-    width: 10vw;
-    height: 10vh;
+    width: 15vw;
+    height: 15vw;
+    border-radius: 50%;
     background: radial-gradient(circle, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0) 100%);
 }
 
 .fog-corner.top-left {
-    top: 0;
-    left: 0;
+    top: -5vw;
+    left: -5vw;
 }
 
 .fog-corner.top-right {
-    top: 0;
-    right: 0;
+    top: -5vw;
+    right: -5vw;
 }
 
 .fog-corner.bottom-left {
-    bottom: 0;
-    left: 0;
+    bottom: -5vw;
+    left: -5vw;
 }
 
 .fog-corner.bottom-right {
-    bottom: 0;
-    right: 0;
+    bottom: -5vw;
+    right: -5vw;
 }
 
 @keyframes fogPulse {
@@ -197,4 +197,3 @@ button {
         opacity: 0.8;
     }
 }
-*/

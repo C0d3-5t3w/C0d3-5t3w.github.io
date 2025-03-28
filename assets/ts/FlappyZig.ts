@@ -1,4 +1,30 @@
 const CONSTANTS = {
+    BASE_GRAVITY: 0.2,
+    BASE_JUMP_FORCE: -6.0,
+    BASE_WALL_SPEED: 3,
+    BASE_WALL_SPACING: 900,
+    BASE_WALL_GAP: 225,
+    BASE_ZIG_WIDTH: 45,
+    BASE_ZIG_HEIGHT: 45,
+    DEATH_PAUSE: 60,
+    BASE_BULLET_SIZE: 45,
+    BASE_ENEMY_SIZE: 35,
+    BASE_ENEMY_SPEED: 6,
+    BASE_ENEMY_SPAWN_INTERVAL: 300,
+    BASE_ENEMY_BOB_AMPLITUDE: 100,
+    ENEMY_BOB_SPEED: 0.1,
+    ENEMY_POINT_VALUE: 5,
+    BASE_BULLET_AUTO_AIM_RANGE: 800.0,
+    BASE_BULLET_SPEED_TOTAL: 9.0,
+    MAX_HIGH_SCORES: 5,
+    BASE_TRAIL_LINE_WIDTH: 8,
+    SPEED_INCREASE_INTERVAL: 20,
+    SPEED_INCREASE_FACTOR: 0.15,
+    MAX_SPEED_MULTIPLIER: 2.5,
+    BULLET_SIZE_INCREASE: 2,
+    MAX_BULLET_SIZE: 55,
+    
+    // Scaled values (will be calculated in setupCanvas)
     GRAVITY: 0.2,
     JUMP_FORCE: -6.0,
     WALL_SPEED: 3,
@@ -6,25 +32,17 @@ const CONSTANTS = {
     WALL_GAP: 225,
     ZIG_WIDTH: 45,
     ZIG_HEIGHT: 45,
-    DEATH_PAUSE: 60,
     BULLET_SIZE: 45,
     ENEMY_SIZE: 35,
     ENEMY_SPEED: 6,
-    ENEMY_SPAWN_INTERVAL: 300,
     ENEMY_BOB_AMPLITUDE: 100,
-    ENEMY_BOB_SPEED: 0.1,
-    ENEMY_POINT_VALUE: 5,
     BULLET_AUTO_AIM_RANGE: 800.0,
     BULLET_SPEED_TOTAL: 9.0,
-    MAX_HIGH_SCORES: 5,
     TRAIL_LINE_WIDTH: 8,
-    SPEED_INCREASE_INTERVAL: 20, 
-    SPEED_INCREASE_FACTOR: 0.15, 
-    MAX_SPEED_MULTIPLIER: 2.5, 
-    BULLET_SIZE_INCREASE: 2, 
-    MAX_BULLET_SIZE: 55,
+    
     SCREEN_WIDTH: 0,
-    SCREEN_HEIGHT: 0
+    SCREEN_HEIGHT: 0,
+    SCALE_FACTOR: 1 
 };
 
 interface Zig {
@@ -152,22 +170,51 @@ class Game {
     }
 
     setupCanvas(): void {
-        const aspectRatio = 9/18;
-        let width = Math.min(window.innerWidth * 0.95, window.innerHeight * aspectRatio * 0.95);
-        let height = width / aspectRatio;
-
-        if (height > window.innerHeight * 0.95) {
-            height = window.innerHeight * 0.95;
-            width = height * aspectRatio;
+        const targetAspectRatio = 16 / 9; 
+        let width, height;
+        
+        const screenWidth = window.innerWidth;
+        const screenHeight = window.innerHeight;
+        
+        if (screenWidth / screenHeight > targetAspectRatio) {
+            height = screenHeight * 0.9; 
+            width = height * targetAspectRatio;
+        } else {
+            width = screenWidth * 0.9; 
+            height = width / targetAspectRatio;
         }
-
+        
         this.canvas.width = width;
         this.canvas.height = height;
         this.canvas.style.display = 'block';
         this.canvas.style.margin = 'auto';
-
+        
         CONSTANTS.SCREEN_WIDTH = width;
         CONSTANTS.SCREEN_HEIGHT = height;
+        
+        const referenceWidth = 1920;
+        CONSTANTS.SCALE_FACTOR = width / referenceWidth;
+        
+        CONSTANTS.GRAVITY = CONSTANTS.BASE_GRAVITY * CONSTANTS.SCALE_FACTOR;
+        CONSTANTS.JUMP_FORCE = CONSTANTS.BASE_JUMP_FORCE * CONSTANTS.SCALE_FACTOR;
+        CONSTANTS.WALL_SPEED = CONSTANTS.BASE_WALL_SPEED * CONSTANTS.SCALE_FACTOR;
+        CONSTANTS.WALL_SPACING = CONSTANTS.BASE_WALL_SPACING * CONSTANTS.SCALE_FACTOR;
+        CONSTANTS.WALL_GAP = CONSTANTS.BASE_WALL_GAP * CONSTANTS.SCALE_FACTOR;
+        CONSTANTS.ZIG_WIDTH = CONSTANTS.BASE_ZIG_WIDTH * CONSTANTS.SCALE_FACTOR;
+        CONSTANTS.ZIG_HEIGHT = CONSTANTS.BASE_ZIG_HEIGHT * CONSTANTS.SCALE_FACTOR;
+        CONSTANTS.BULLET_SIZE = CONSTANTS.BASE_BULLET_SIZE * CONSTANTS.SCALE_FACTOR;
+        CONSTANTS.ENEMY_SIZE = CONSTANTS.BASE_ENEMY_SIZE * CONSTANTS.SCALE_FACTOR;
+        CONSTANTS.ENEMY_SPEED = CONSTANTS.BASE_ENEMY_SPEED * CONSTANTS.SCALE_FACTOR;
+        CONSTANTS.ENEMY_BOB_AMPLITUDE = CONSTANTS.BASE_ENEMY_BOB_AMPLITUDE * CONSTANTS.SCALE_FACTOR;
+        CONSTANTS.BULLET_AUTO_AIM_RANGE = CONSTANTS.BASE_BULLET_AUTO_AIM_RANGE * CONSTANTS.SCALE_FACTOR;
+        CONSTANTS.BULLET_SPEED_TOTAL = CONSTANTS.BASE_BULLET_SPEED_TOTAL * CONSTANTS.SCALE_FACTOR;
+        CONSTANTS.TRAIL_LINE_WIDTH = CONSTANTS.BASE_TRAIL_LINE_WIDTH * CONSTANTS.SCALE_FACTOR;
+        
+        if (this.zig) {
+            this.zig.x = CONSTANTS.SCREEN_WIDTH / 4;
+        }
+        
+        this.currentBulletSize = CONSTANTS.BULLET_SIZE;
     }
 
     setupControls(): void {
@@ -310,7 +357,10 @@ class Game {
         }
 
         if (this.walls.length === 0 || this.walls[this.walls.length - 1].x < CONSTANTS.SCREEN_WIDTH - CONSTANTS.WALL_SPACING) {
-            const height = Math.random() * (CONSTANTS.SCREEN_HEIGHT - CONSTANTS.WALL_GAP - 100) + 50;
+            const minGapPosition = 50 * CONSTANTS.SCALE_FACTOR;
+            const maxGapPosition = CONSTANTS.SCREEN_HEIGHT - CONSTANTS.WALL_GAP - 50 * CONSTANTS.SCALE_FACTOR;
+            const height = Math.random() * (maxGapPosition - minGapPosition) + minGapPosition;
+            
             this.walls.push({
                 x: CONSTANTS.SCREEN_WIDTH,
                 height: height,
@@ -342,7 +392,8 @@ class Game {
         );
 
         this.spawnTimer++;
-        if (this.spawnTimer >= CONSTANTS.ENEMY_SPAWN_INTERVAL) {
+        const scaledSpawnInterval = Math.max(60, CONSTANTS.BASE_ENEMY_SPAWN_INTERVAL / CONSTANTS.SCALE_FACTOR);
+        if (this.spawnTimer >= scaledSpawnInterval) {
             this.spawnTimer = 0;
             const newY = Math.random() * (CONSTANTS.SCREEN_HEIGHT - CONSTANTS.ENEMY_SIZE);
             this.enemies.push({
@@ -642,21 +693,25 @@ class Game {
     }
 
     drawUI(): void {
+        const fontSize = Math.max(16, Math.round(20 * CONSTANTS.SCALE_FACTOR));
+        
         this.ctx.fillStyle = 'white';
-        this.ctx.font = '20px Arial';
+        this.ctx.font = `${fontSize}px Arial`;
+        
         if (this.gameOver) {
-            this.ctx.fillText(`Game Over! Score: ${this.score}`, 10, 30);
-            this.ctx.fillText('High Scores:', 10, 60);
+            this.ctx.fillText(`Game Over! Score: ${this.score}`, 10, 30 * CONSTANTS.SCALE_FACTOR);
+            this.ctx.fillText('High Scores:', 10, 60 * CONSTANTS.SCALE_FACTOR);
             this.highScores.forEach((score, i) => {
-                this.ctx.fillText(`${i + 1}. ${score}`, 10, 90 + i * 30);
+                this.ctx.fillText(`${i + 1}. ${score}`, 10, (90 + i * 30) * CONSTANTS.SCALE_FACTOR);
             });
             if (this.canReset) {
-                this.ctx.fillText('Tap or Press SPACE to restart', 10, 90 + this.highScores.length * 30);
+                this.ctx.fillText('Tap or Press SPACE to restart', 10, (90 + this.highScores.length * 30) * CONSTANTS.SCALE_FACTOR);
             }
         } else {
-            this.ctx.fillText(`Score: ${this.score}`, 10, 30);
+            this.ctx.fillText(`Score: ${this.score}`, 10, 30 * CONSTANTS.SCALE_FACTOR);
             if (this.highScores.length > 0) {
-                this.ctx.fillText(`High Score: ${this.highScores[0]}`, 200, 30);
+                const highScoreX = Math.min(200 * CONSTANTS.SCALE_FACTOR, CONSTANTS.SCREEN_WIDTH - 150);
+                this.ctx.fillText(`High Score: ${this.highScores[0]}`, highScoreX, 30 * CONSTANTS.SCALE_FACTOR);
             }
         }
     }
@@ -783,4 +838,5 @@ class Game {
 }
 
 window.onload = () => new Game();
+
 // <3
