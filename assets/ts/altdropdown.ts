@@ -18,7 +18,7 @@ class PageSiteMapDropdown {
         this.dropdown.style.zIndex = '1000';
 
         this.button = document.createElement('button');
-        this.button.textContent = '🗺️ Navigation';
+        this.button.textContent = '🗺️';
         this.button.className = 'dropdown-button';
         this.button.style.backgroundColor = 'var(--accent-teal)';
         this.button.style.color = 'var(--primary-color)';
