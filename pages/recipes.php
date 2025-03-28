@@ -124,6 +124,129 @@ $thai_recipes = [
         "origin" => "Pla Rad Prik is a flavorful Thai dish, combining crispy fish with a sweet and spicy sauce."
     ]
 ];
+
+$hispanic_recipes = [
+    [
+        "name" => "Tacos al Pastor",
+        "description" => "Marinated pork tacos with pineapple, onions, and cilantro.",
+        "instructions" => "1. Marinate sliced pork with achiote paste, pineapple juice, and spices. 2. Stack marinated pork on a vertical spit. 3. Cook and slice thin pieces off the spit. 4. Serve on corn tortillas with diced pineapple, onions, and cilantro. 5. Add lime juice and salsa.",
+        "origin" => "Tacos al Pastor originated in central Mexico, inspired by Lebanese immigrants who brought shawarma techniques in the early 20th century."
+    ],
+    [
+        "name" => "Paella",
+        "description" => "Saffron-infused rice dish with seafood, chicken, and vegetables.",
+        "instructions" => "1. Sauté chicken and vegetables in olive oil. 2. Add rice and saffron. 3. Pour in broth and simmer. 4. Add seafood in the last few minutes of cooking. 5. Let rest before serving.",
+        "origin" => "Paella originated in Valencia, Spain, and is considered one of Spain's most iconic dishes."
+    ],
+    [
+        "name" => "Empanadas",
+        "description" => "Stuffed pastries with various fillings like meat, cheese, or vegetables.",
+        "instructions" => "1. Prepare dough with flour, water, and salt. 2. Roll out dough and cut into circles. 3. Add filling to center. 4. Fold over and seal edges. 5. Bake or fry until golden brown.",
+        "origin" => "Empanadas are popular throughout Latin America and Spain, with each region having its own variation."
+    ],
+    [
+        "name" => "Tamales",
+        "description" => "Masa dough filled with meat, cheese, or beans, wrapped in corn husks and steamed.",
+        "instructions" => "1. Prepare masa dough with corn flour, lard, and broth. 2. Soak corn husks in water. 3. Spread masa on husks, add filling, and fold. 4. Steam for 1-2 hours until firm.",
+        "origin" => "Tamales date back to ancient Mesoamerican civilizations including the Aztec and Maya peoples."
+    ],
+    [
+        "name" => "Mole Poblano",
+        "description" => "Rich sauce made with chocolate, chili peppers, and numerous spices, typically served with chicken.",
+        "instructions" => "1. Toast and grind multiple varieties of dried chilies. 2. Mix with spices, chocolate, bread, and broth. 3. Simmer until thick and complex. 4. Serve over chicken with rice.",
+        "origin" => "Mole Poblano originates from Puebla, Mexico, and is considered Mexico's national dish."
+    ],
+    [
+        "name" => "Ceviche",
+        "description" => "Raw fish marinated in citrus juices and spiced with chili peppers.",
+        "instructions" => "1. Dice fresh fish into small cubes. 2. Marinate in lime or lemon juice for several hours. 3. Mix with diced onions, chili peppers, cilantro, and salt. 4. Serve chilled.",
+        "origin" => "Ceviche is popular in coastal regions of Latin America, especially Peru and Ecuador."
+    ],
+    [
+        "name" => "Enchiladas",
+        "description" => "Corn tortillas rolled around filling and covered with chili sauce.",
+        "instructions" => "1. Dip corn tortillas in chili sauce. 2. Fill with meat, cheese, or beans. 3. Roll and arrange in a baking dish. 4. Top with more sauce and cheese. 5. Bake until heated through.",
+        "origin" => "Enchiladas have their roots in Mayan cuisine and evolved in Mexico over many centuries."
+    ],
+    [
+        "name" => "Arroz con Pollo",
+        "description" => "One-pot rice dish with chicken, vegetables, and spices.",
+        "instructions" => "1. Brown chicken pieces in oil. 2. Add sofrito (garlic, onions, peppers). 3. Add rice, broth, saffron, and spices. 4. Simmer until rice is tender and liquid is absorbed.",
+        "origin" => "Arroz con Pollo is a staple in many Hispanic countries, with variations found throughout Latin America and Spain."
+    ],
+    [
+        "name" => "Chiles Rellenos",
+        "description" => "Poblano peppers stuffed with cheese or meat, battered and fried.",
+        "instructions" => "1. Roast and peel poblano peppers. 2. Stuff with cheese or meat filling. 3. Dip in egg batter. 4. Fry until golden. 5. Serve with tomato sauce.",
+        "origin" => "Chiles Rellenos originated in Puebla, Mexico, and combine indigenous ingredients with European cooking techniques."
+    ],
+    [
+        "name" => "Flan",
+        "description" => "Caramel custard dessert with a layer of soft caramel on top.",
+        "instructions" => "1. Prepare caramel by melting sugar until golden. 2. Pour into mold. 3. Mix eggs, milk, sugar, and vanilla. 4. Pour over caramel. 5. Bake in water bath until set.",
+        "origin" => "Flan was brought to Latin America by Spanish colonizers but has roots in ancient Roman cuisine."
+    ],
+    [
+        "name" => "Pupusas",
+        "description" => "Thick corn tortillas stuffed with cheese, beans, or meat.",
+        "instructions" => "1. Mix masa flour with water to form dough. 2. Form a ball and make an indentation. 3. Fill with cheese, beans, or pork. 4. Close and flatten. 5. Cook on griddle until golden brown.",
+        "origin" => "Pupusas are the national dish of El Salvador with a history dating back to pre-Columbian times."
+    ],
+    [
+        "name" => "Tres Leches Cake",
+        "description" => "Sponge cake soaked in three kinds of milk: evaporated milk, condensed milk, and heavy cream.",
+        "instructions" => "1. Bake a sponge cake. 2. Mix three milks. 3. Pour over cake and let soak. 4. Top with whipped cream and cinnamon.",
+        "origin" => "Tres Leches cake is popular throughout Latin America, with origins likely from Nicaragua or Mexico in the 19th century."
+    ],
+    [
+        "name" => "Ropa Vieja",
+        "description" => "Shredded beef stewed with vegetables and tomatoes.",
+        "instructions" => "1. Simmer beef until tender. 2. Shred the beef. 3. Sauté with onions, peppers, and tomatoes. 4. Season with cumin and bay leaves. 5. Serve with rice and beans.",
+        "origin" => "Ropa Vieja is Cuba's national dish, with its name literally meaning 'old clothes' due to its shredded appearance."
+    ],
+    [
+        "name" => "Churros",
+        "description" => "Fried dough pastry dusted with cinnamon sugar, often served with chocolate dipping sauce.",
+        "instructions" => "1. Prepare choux pastry dough. 2. Pipe through star-shaped nozzle. 3. Fry until golden brown. 4. Roll in cinnamon sugar. 5. Serve with chocolate sauce.",
+        "origin" => "Churros originated in Spain but became wildly popular throughout Latin America and Spanish-speaking countries."
+    ],
+    [
+        "name" => "Tostadas",
+        "description" => "Crispy flat corn tortillas topped with beans, meat, lettuce, cheese, and salsa.",
+        "instructions" => "1. Fry corn tortillas until crisp. 2. Spread with refried beans. 3. Top with meat, lettuce, cheese, and salsa. 4. Add sour cream or guacamole if desired.",
+        "origin" => "Tostadas evolved in Mexico as a way to use stale tortillas, transforming them into crispy bases for toppings."
+    ],
+    [
+        "name" => "Pozole",
+        "description" => "Hominy corn soup with meat, typically garnished with shredded lettuce, radishes, and lime.",
+        "instructions" => "1. Simmer pork or chicken with hominy and spices. 2. Add red or green chile sauce. 3. Garnish with lettuce, radishes, onion, and lime. 4. Serve with tortillas.",
+        "origin" => "Pozole has been a traditional soup in Mexico since pre-Hispanic times, often served at celebrations."
+    ],
+    [
+        "name" => "Picadillo",
+        "description" => "Ground beef dish with olives, raisins, and potatoes in a tomato-based sauce.",
+        "instructions" => "1. Brown ground beef. 2. Add onions, garlic, and tomato sauce. 3. Mix in olives, raisins, and potatoes. 4. Season with cumin and bay leaves. 5. Serve with rice.",
+        "origin" => "Picadillo is popular throughout Latin America, especially in Cuba, Puerto Rico, and Mexico, reflecting Spanish culinary influence."
+    ],
+    [
+        "name" => "Pastel de Choclo",
+        "description" => "Corn pie with meat filling, olives, raisins, and hard-boiled eggs.",
+        "instructions" => "1. Prepare ground beef filling with onions, olives, and raisins. 2. Blend corn kernels to make a paste. 3. Layer meat filling in a dish. 4. Cover with corn mixture. 5. Bake until golden.",
+        "origin" => "Pastel de Choclo is a popular Chilean and Argentinian dish that combines European and indigenous culinary traditions."
+    ],
+    [
+        "name" => "Chimichurri Steak",
+        "description" => "Grilled steak topped with chimichurri sauce made from parsley, garlic, vinegar, and oil.",
+        "instructions" => "1. Grill steak to desired doneness. 2. Blend parsley, garlic, oregano, vinegar, and oil for chimichurri. 3. Let sauce sit for flavors to blend. 4. Serve sauce over grilled steak.",
+        "origin" => "Chimichurri sauce originates from Argentina and Uruguay, where it's a staple accompaniment to grilled meats."
+    ],
+    [
+        "name" => "Sopa de Tortilla",
+        "description" => "Tortilla soup with tomato broth, fried tortilla strips, avocado, cheese, and sour cream.",
+        "instructions" => "1. Prepare tomato-based broth with chili peppers and garlic. 2. Cut tortillas into strips and fry until crisp. 3. Pour broth into bowls. 4. Top with tortilla strips, avocado, cheese, and sour cream.",
+        "origin" => "Sopa de Tortilla is a traditional Mexican soup believed to originate from the Mexico City area."
+    ]
+];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -131,66 +254,53 @@ $thai_recipes = [
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="../assets/css/main.css">
+        <link rel="stylesheet" href="../assets/css/alt.css">
         <title>Recipes</title>
-        <style>
-            body {
-                margin: 0;
-                padding: 0;
-                min-height: 100vh;
-                display: flex;
-                flex-direction: column;
-                color: var(--primary-color);
-                background-color: var(--background-color);
-                position: relative;
-                align-items: center;
-            }
-            h1 {
-                color: var(--primary-color);
-                background-color: var(--accent-red);
-                border: 1px solid var(--primary-color);
-                padding: 10px;
-                margin: 20px 0;
-                width: 100%;
-                text-align: center;
-            }
-            ul {
-                list-style: none;
-                padding: 0;
-                width: 100%;
-            }
-            li {
-                background: var(--dark-bg);
-                color: var(--primary-color);
-                margin: 10px 0;
-                padding: 15px;
-                border-radius: 5px;
-                box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
-                border: 1px solid var(--primary-color);
-            }
-        </style>
     </head>
     <body>
-        <h1>Thai Recipes</h1>
-        <ul id="thai-recipes"></ul>
-        <h2>
-            <a href="../index.html" style="color: white;">Home</a>
-        </h2>
-        <script>
-            const thaiRecipes = <?php echo json_encode($thai_recipes); ?>;
-
-            function populateRecipes(recipesArray, elementId) {
-                const ul = document.getElementById(elementId);
-                recipesArray.forEach(recipe => {
-                    const li = document.createElement('li');
-                    li.innerHTML = `<strong>${recipe.name}</strong>: ${recipe.description}
-                                    <br><br><strong>Instructions:</strong> ${recipe.instructions}
-                                    <br><br><strong>Origin:</strong> ${recipe.origin}`;
-                    ul.appendChild(li);
-                });
-            }
-
-            populateRecipes(thaiRecipes, 'thai-recipes');
-        </script>
+        <div class="content page-content">
+            <h1 class="animated-heading">Thai Recipes</h1>
+            <div class="recipe-container">
+                <?php foreach($thai_recipes as $recipe): ?>
+                    <div class="recipe-item">
+                        <div class="recipe-header">
+                            <h3 class="recipe-title"><?php echo $recipe['name']; ?></h3>
+                            <div class="recipe-description"><?php echo $recipe['description']; ?></div>
+                        </div>
+                        <div class="recipe-content">
+                            <strong>Instructions:</strong>
+                            <div class="recipe-instructions"><?php echo $recipe['instructions']; ?></div>
+                            <div class="recipe-origin"><?php echo $recipe['origin']; ?></div>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+            
+            <div class="section-divider">
+                <span>Explore More Cuisines</span>
+            </div>
+            
+            <h1 class="animated-heading">Hispanic Recipes</h1>
+            <div class="recipe-container">
+                <?php foreach($hispanic_recipes as $recipe): ?>
+                    <div class="recipe-item">
+                        <div class="recipe-header">
+                            <h3 class="recipe-title"><?php echo $recipe['name']; ?></h3>
+                            <div class="recipe-description"><?php echo $recipe['description']; ?></div>
+                        </div>
+                        <div class="recipe-content">
+                            <strong>Instructions:</strong>
+                            <div class="recipe-instructions"><?php echo $recipe['instructions']; ?></div>
+                            <div class="recipe-origin"><?php echo $recipe['origin']; ?></div>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+            
+            <h2>
+                <script src="../assets/js/altdropdown.js"></script>
+            </h2>
+        </div>
         <script src="../assets/js/alt.js"></script>
     </body>
 </html>

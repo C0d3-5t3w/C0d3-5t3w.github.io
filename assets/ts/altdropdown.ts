@@ -1,4 +1,4 @@
-class SiteMapDropdown {
+class PageSiteMapDropdown {
     private dropdown!: HTMLElement;
     private button!: HTMLElement;
     private content!: HTMLElement;
@@ -41,13 +41,13 @@ class SiteMapDropdown {
         this.content.style.marginTop = '5px';
 
         const links = [
-            { text: '🏠 Home', url: 'index.html' },
-            { text: '📷 Pictures', url: 'pages/pictures.html' },
-            { text: '🍲 Recipes', url: 'pages/recipes.html' },
-            { text: '💡 Advice', url: 'pages/advice.html' },
-            { text: '🎮 FlappyZig', url: 'pages/FlappyZig.html' },
-            { text: '✨ Particles', url: 'pages/particles.html' },
-            { text: '🔗 Links', url: 'pages/links.html' }
+            { text: '🏠 Home', url: '../index.html' },
+            { text: '📷 Pictures', url: 'pictures.html' },
+            { text: '🍲 Recipes', url: 'recipes.html' },
+            { text: '💡 Advice', url: 'advice.html' },
+            { text: '🎮 FlappyZig', url: 'FlappyZig.html' },
+            { text: '✨ Particles', url: 'particles.html' },
+            { text: '🔗 Links', url: 'links.html' }
         ];
 
         links.forEach(link => {
@@ -113,5 +113,5 @@ class SiteMapDropdown {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    new SiteMapDropdown();
+    new PageSiteMapDropdown();
 });

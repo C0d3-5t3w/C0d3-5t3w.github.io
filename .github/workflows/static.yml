@@ -79,6 +79,8 @@ jobs:
         run: |
           mkdir -p assets/js
           echo "Compiling TypeScript files..."
+          # Explicitly list important TypeScript files for visibility
+          echo "Important files to compile: dropdown.ts and altdropdown.ts"
           npx tsc --listFiles
           if [ $? -ne 0 ]; then
             echo "TypeScript compilation failed. Trying to continue with existing JS files."
@@ -90,6 +92,19 @@ jobs:
         run: |
           echo "Generated JavaScript files:"
           find ./assets/js -name "*.js" | sort
+          # Check specifically for dropdown.js and altdropdown.js
+          if [ -f "./assets/js/dropdown.js" ]; then
+            echo "✅ dropdown.js successfully generated"
+          else
+            echo "❌ dropdown.js missing"
+            exit 1
+          fi
+          if [ -f "./assets/js/altdropdown.js" ]; then
+            echo "✅ altdropdown.js successfully generated"
+          else
+            echo "❌ altdropdown.js missing"
+            exit 1
+          fi
           
       - name: Lint JavaScript
         run: |
@@ -104,7 +119,7 @@ jobs:
                 --mangle \
                 --source-map "content='inline',url='$(basename "$file").map'" \
                 --output "${file%.js}.min.js"
-              mv "${file%.js}.min.js" "$file"
+              mv "${file%.js}.min.js}" "$file"
             fi
           done
           

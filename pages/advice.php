@@ -45,58 +45,33 @@ $dubstep_advice = [
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="../assets/css/main.css">
+        <link rel="stylesheet" href="../assets/css/alt.css">
         <title>Advice</title>
-        <style>
-            body {
-                margin: 0;
-                padding: 0;
-                min-height: 100vh;
-                display: flex;
-                flex-direction: column;
-                color: var(--primary-color);
-                background-color: var(--background-color);
-                position: relative;
-                align-items: center;
-                padding: 20px;
-            }
-            h1 {
-                color: var(--primary-color);
-                background-color: var(--accent-red);
-                border: 1px solid var(--primary-color);
-                padding: 10px;
-                margin: 20px 0;
-                width: 100%;
-                text-align: center;
-            }
-            ul {
-                list-style: none;
-                padding: 0;
-                width: 100%;
-                max-width: 800px;
-            }
-            li {
-                background: var(--dark-bg);
-                color: var(--primary-color);
-                margin: 10px 0;
-                padding: 15px;
-                border-radius: 5px;
-                box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
-                border: 1px solid var(--primary-color);
-            }
-        </style>
     </head>
     <body>
-        <h1>Coding Advice</h1>
-        <ul id="coding-advice"></ul>
+        <div class="content page-content">
+            <div class="advice-section">
+                <h1 class="animated-heading">Coding Advice</h1>
+                <ul id="coding-advice" class="styled-list"></ul>
 
-        <h1>Cooking Advice</h1>
-        <ul id="cooking-advice"></ul>
+                <div class="section-divider">
+                    <span>More Wisdom</span>
+                </div>
 
-        <h1>Dubstep Music Advice</h1>
-        <ul id="dubstep-advice"></ul>
-        <h2>
-            <a href="../index.html" style="color: white;">Home</a>
-        </h2>
+                <h1 class="animated-heading">Cooking Advice</h1>
+                <ul id="cooking-advice" class="styled-list"></ul>
+
+                <div class="section-divider">
+                    <span>Beat Drops</span>
+                </div>
+
+                <h1 class="animated-heading">Dubstep Music Advice</h1>
+                <ul id="dubstep-advice" class="styled-list"></ul>
+            </div>
+            <h2>
+                <script src="../assets/js/altdropdown.js"></script>
+            </h2>
+        </div>
         <script>
             const codingAdvice = <?php echo json_encode($coding_advice); ?>;
             const cookingAdvice = <?php echo json_encode($cooking_advice); ?>;

@@ -8,6 +8,7 @@ header("Expires: Sat, 26 Jul 1997 05:00:00 GMT");
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/alt.css">
     <title>particles</title>
     <style>
         .particle {
@@ -63,7 +64,21 @@ header("Expires: Sat, 26 Jul 1997 05:00:00 GMT");
     </style>
 </head>
 <body>
-    <div id="particle-stats">Particles: <span id="particle-count">0</span></div>
+    <div id="particle-stats" class="terminal-text">Particles: <span id="particle-count">0</span></div>
+    
+    <div class="particle-controls">
+        <h3>Particle Controls</h3>
+        <div class="control-item">
+            <label for="particle-size">Size:</label>
+            <input type="range" id="particle-size" min="5" max="50" value="20">
+        </div>
+        <div class="control-item">
+            <label for="particle-speed">Speed:</label>
+            <input type="range" id="particle-speed" min="1" max="10" value="5">
+        </div>
+        <button id="add-particles" class="pulse-button">Add More Particles</button>
+    </div>
+    
     <div id="particle-container">
         <?php
         for($i = 0; $i < 250; $i++) { 
@@ -71,7 +86,7 @@ header("Expires: Sat, 26 Jul 1997 05:00:00 GMT");
             $x = rand(0, 100);
             $y = rand(0, 100);
             $hue = rand(0, 360);
-            echo "<div class='particle' 
+            echo "<div class='particle enhanced' 
                 data-size='{$size}'
                 data-x='{$x}'
                 data-y='{$y}'
@@ -86,10 +101,10 @@ header("Expires: Sat, 26 Jul 1997 05:00:00 GMT");
         }
         ?>
     </div>
-    <div class="content">
-        <h1>
-        <a href="../index.html" style="color: white;">Home</a>
-        </h1>
+    <div class="content page-content">
+    <h2>
+        <script src="../assets/js/altdropdown.js"></script>
+    </h2>
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -98,6 +113,35 @@ header("Expires: Sat, 26 Jul 1997 05:00:00 GMT");
             const particleCountDisplay = document.getElementById('particle-count');
             const screenWidth = window.innerWidth;
             const screenHeight = window.innerHeight;
+            
+            // Add new controls functionality
+            const sizeSlider = document.getElementById('particle-size');
+            const speedSlider = document.getElementById('particle-speed');
+            const addButton = document.getElementById('add-particles');
+            
+            let particleSpeed = 5;
+            
+            sizeSlider.addEventListener('change', function() {
+                const newSize = this.value;
+                document.querySelectorAll('.particle').forEach(p => {
+                    p.style.width = `${newSize}px`;
+                    p.style.height = `${newSize}px`;
+                });
+            });
+            
+            speedSlider.addEventListener('change', function() {
+                particleSpeed = this.value;
+            });
+            
+            addButton.addEventListener('click', function() {
+                for (let i = 0; i < 25; i++) {
+                    const size = sizeSlider.value;
+                    const x = Math.random() * 100;
+                    const y = Math.random() * 100;
+                    const hue = Math.random() * 360;
+                    createParticle(size, x, y, hue);
+                }
+            });
             
             function updateParticleCount() {
                 particleCountDisplay.textContent = document.querySelectorAll('.particle').length;
@@ -118,12 +162,13 @@ header("Expires: Sat, 26 Jul 1997 05:00:00 GMT");
             
             function createParticle(size, x, y, hue, angle = null, distance = null) {
                 const particle = document.createElement('div');
-                particle.className = 'particle';
+                particle.className = 'particle enhanced';
                 particle.style.width = `${size}px`;
                 particle.style.height = `${size}px`;
                 particle.style.left = `${x}%`;
                 particle.style.top = `${y}%`;
                 particle.style.background = `hsla(${hue}, 70%, 50%, 0.6)`;
+                particle.style.boxShadow = `0 0 15px var(--alt-glow)`;
                 
                 particle.dataset.size = size;
                 particle.dataset.x = x;
