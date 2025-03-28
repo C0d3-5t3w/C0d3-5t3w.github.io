@@ -24,7 +24,6 @@ const CONSTANTS = {
     BULLET_SIZE_INCREASE: 2,
     MAX_BULLET_SIZE: 55,
     
-    // Scaled values (will be calculated in setupCanvas)
     GRAVITY: 0.2,
     JUMP_FORCE: -6.0,
     WALL_SPEED: 3,
