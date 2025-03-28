@@ -3,6 +3,7 @@ header("Cache-Control: no-cache, must-revalidate");
 header("Expires: Sat, 26 Jul 1997 05:00:00 GMT");
 
 $quotes = [
+    "Don't die.",
     "Code is like music. It has rhythm, structure, and harmony.",
     "Just as music has different genres, coding has different languages.",
     "Cooking is like coding; both are creative processes that require precision.",
