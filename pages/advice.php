@@ -80,7 +80,7 @@ $dubstep_advice = [
         <h1>Dubstep Music Advice</h1>
         <ul id="dubstep-advice"></ul>
         <h2>
-            <a href="index.html" style="color: white;">Home</a>
+            <a href="../index.html" style="color: white;">Home</a>
         </h2>
         <script>
             const codingAdvice = <?php echo json_encode($coding_advice); ?>;

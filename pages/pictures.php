@@ -167,7 +167,7 @@ $spotlight = $images[array_rand($images)];
             } ?>
         </div>
         <h2>
-            <a href="index.html" style="color: white;">Home</a>
+            <a href="../index.html" style="color: white;">Home</a>
         </h2>
     </div>
     <script>

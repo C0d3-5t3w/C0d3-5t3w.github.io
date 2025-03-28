@@ -95,7 +95,7 @@
     </div>
     <div class="content">
         <h1>
-        <a href="index.html" style="color: white;">Home</a>
+        <a href="../index.html" style="color: white;">Home</a>
         </h1>
     </div>
     <script>

@@ -160,7 +160,7 @@ $thai_recipes = [
         <h1>Thai Recipes</h1>
         <ul id="thai-recipes"></ul>
         <h2>
-            <a href="index.html" style="color: white;">Home</a>
+            <a href="../index.html" style="color: white;">Home</a>
         </h2>
         <script>
             const thaiRecipes = <?php echo json_encode($thai_recipes); ?>;
