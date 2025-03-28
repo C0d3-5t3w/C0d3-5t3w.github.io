@@ -100,10 +100,18 @@ jobs:
           
       - name: Process PHP files
         run: |
-          find . -name "*.php" -type f -exec sh -c '
+          echo "Listing all PHP files found in repository:"
+          find . -type f -name "*.php" | sort
+          
+          echo "\nProcessing PHP files..."
+          find . -type f -name "*.php" -exec sh -c '
+            echo "Converting $1 to ${1%.php}.html"
             php "$1" > "${1%.php}.html"
             rm "$1"
           ' sh {} \;
+          
+          echo "\nVerifying conversion - HTML files created:"
+          find . -type f -name "*.html" | grep -v "node_modules" | sort
           
       - name: Compile Sass
         run: |
