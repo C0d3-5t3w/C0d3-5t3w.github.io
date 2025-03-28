@@ -1,3 +1,7 @@
+<?php
+header("Cache-Control: no-cache, must-revalidate");
+header("Expires: Sat, 26 Jul 1997 05:00:00 GMT");
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -62,9 +66,6 @@
     <div id="particle-stats">Particles: <span id="particle-count">0</span></div>
     <div id="particle-container">
         <?php
-        header("Cache-Control: no-cache, must-revalidate");
-        header("Expires: Sat, 26 Jul 1997 05:00:00 GMT");
-
         for($i = 0; $i < 250; $i++) { 
             $size = rand(10, 30); 
             $x = rand(0, 100);
