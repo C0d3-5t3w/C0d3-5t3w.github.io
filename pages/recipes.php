@@ -277,7 +277,7 @@ $hispanic_recipes = [
             </div>
             
             <div class="section-divider">
-                <span>Explore More Cuisines</span>
+                <span>🤌🏼</span>
             </div>
             
             <h1 class="animated-heading">Hispanic Recipes</h1>
