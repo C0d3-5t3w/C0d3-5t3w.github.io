@@ -1,4 +1,53 @@
-const CONSTANTS = {
+interface GameConstants {
+    BASE_GRAVITY: number;
+    BASE_JUMP_FORCE: number;
+    BASE_WALL_SPEED: number;
+    BASE_WALL_SPACING: number;
+    BASE_WALL_GAP: number;
+    BASE_ZIG_WIDTH: number;
+    BASE_ZIG_HEIGHT: number;
+    BASE_BULLET_SIZE: number;
+    BASE_ENEMY_SIZE: number;
+    BASE_ENEMY_SPEED: number;
+    BASE_ENEMY_SPAWN_INTERVAL: number;
+    BASE_ENEMY_BOB_AMPLITUDE: number;
+    BASE_BULLET_AUTO_AIM_RANGE: number;
+    BASE_BULLET_SPEED_TOTAL: number;
+    BASE_TRAIL_LINE_WIDTH: number;
+    DEATH_PAUSE: number;
+    ENEMY_BOB_SPEED: number;
+    ENEMY_POINT_VALUE: number;
+    MAX_HIGH_SCORES: number;
+    SPEED_INCREASE_INTERVAL: number;
+    SPEED_INCREASE_FACTOR: number;
+    MAX_SPEED_MULTIPLIER: number;
+    BULLET_SIZE_INCREASE: number;
+    MAX_BULLET_SIZE: number;
+    MIN_SCALE_FACTOR: number;
+    IS_MOBILE: boolean;
+    MOBILE_REF_WIDTH: number;
+    DESKTOP_REF_WIDTH: number;
+    UI_SCALE_FACTOR: number;
+    SCREEN_WIDTH: number;
+    SCREEN_HEIGHT: number;
+    SCALE_FACTOR: number;
+    GRAVITY?: number;
+    JUMP_FORCE?: number;
+    WALL_SPEED?: number;
+    WALL_SPACING?: number;
+    WALL_GAP?: number;
+    ZIG_WIDTH?: number;
+    ZIG_HEIGHT?: number;
+    BULLET_SIZE?: number;
+    ENEMY_SIZE?: number;
+    ENEMY_SPEED?: number;
+    ENEMY_BOB_AMPLITUDE?: number;
+    BULLET_AUTO_AIM_RANGE?: number;
+    BULLET_SPEED_TOTAL?: number;
+    TRAIL_LINE_WIDTH?: number;
+}
+
+const CONSTANTS: GameConstants = {
     BASE_GRAVITY: 0.4,
     BASE_JUMP_FORCE: -9.0,
     BASE_WALL_SPEED: 9,
@@ -102,8 +151,9 @@ class Game {
         this.setupCanvas();
         
         const canvasContainer = document.querySelector('.canvas') || document.body;
-        if (canvasContainer.querySelector('canvas')) {
-            canvasContainer.replaceChild(this.canvas, canvasContainer.querySelector('canvas'));
+        const existingCanvas = canvasContainer.querySelector('canvas');
+        if (existingCanvas) {
+            canvasContainer.replaceChild(this.canvas, existingCanvas);
         } else {
             canvasContainer.appendChild(this.canvas);
         }
