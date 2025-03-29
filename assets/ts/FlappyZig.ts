@@ -14,6 +14,7 @@ interface GameConstants {
     BASE_BULLET_AUTO_AIM_RANGE: number;
     BASE_BULLET_SPEED_TOTAL: number;
     BASE_TRAIL_LINE_WIDTH: number;
+    
     DEATH_PAUSE: number;
     ENEMY_BOB_SPEED: number;
     ENEMY_POINT_VALUE: number;
@@ -27,24 +28,27 @@ interface GameConstants {
     IS_MOBILE: boolean;
     MOBILE_REF_WIDTH: number;
     DESKTOP_REF_WIDTH: number;
+    
     UI_SCALE_FACTOR: number;
     SCREEN_WIDTH: number;
     SCREEN_HEIGHT: number;
     SCALE_FACTOR: number;
-    GRAVITY?: number;
-    JUMP_FORCE?: number;
-    WALL_SPEED?: number;
-    WALL_SPACING?: number;
-    WALL_GAP?: number;
-    ZIG_WIDTH?: number;
-    ZIG_HEIGHT?: number;
-    BULLET_SIZE?: number;
-    ENEMY_SIZE?: number;
-    ENEMY_SPEED?: number;
-    ENEMY_BOB_AMPLITUDE?: number;
-    BULLET_AUTO_AIM_RANGE?: number;
-    BULLET_SPEED_TOTAL?: number;
-    TRAIL_LINE_WIDTH?: number;
+    
+    // Dynamic constants that will be calculated - no longer optional
+    GRAVITY: number;
+    JUMP_FORCE: number;
+    WALL_SPEED: number;
+    WALL_SPACING: number;
+    WALL_GAP: number;
+    ZIG_WIDTH: number;
+    ZIG_HEIGHT: number;
+    BULLET_SIZE: number;
+    ENEMY_SIZE: number;
+    ENEMY_SPEED: number;
+    ENEMY_BOB_AMPLITUDE: number;
+    BULLET_AUTO_AIM_RANGE: number;
+    BULLET_SPEED_TOTAL: number;
+    TRAIL_LINE_WIDTH: number;
 }
 
 const CONSTANTS: GameConstants = {
@@ -79,7 +83,21 @@ const CONSTANTS: GameConstants = {
     UI_SCALE_FACTOR: 1,
     SCREEN_WIDTH: 0,
     SCREEN_HEIGHT: 0,
-    SCALE_FACTOR: 1 
+    SCALE_FACTOR: 1,
+    GRAVITY: 0.4,
+    JUMP_FORCE: -9.0,
+    WALL_SPEED: 9,
+    WALL_SPACING: 900,
+    WALL_GAP: 225,
+    ZIG_WIDTH: 45,
+    ZIG_HEIGHT: 45,
+    BULLET_SIZE: 45,
+    ENEMY_SIZE: 35,
+    ENEMY_SPEED: 11,
+    ENEMY_BOB_AMPLITUDE: 100,
+    BULLET_AUTO_AIM_RANGE: 900,
+    BULLET_SPEED_TOTAL: 20,
+    TRAIL_LINE_WIDTH: 8
 };
 
 interface Zig {
@@ -690,7 +708,7 @@ class Game {
 
         const centerX = enemy.x + CONSTANTS.ENEMY_SIZE/2;
         const centerY = enemy.y + CONSTANTS.ENEMY_SIZE/2;
-        const size = CONSTANTS.ENEMY_SIZE;
+        const size = CONSTANTS.ENEMY_SIZE; // Save reference to avoid 'possibly undefined'
 
         switch(enemy.shape) {
             case 0: 
