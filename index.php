@@ -221,7 +221,7 @@ $random_quote = $quotes[array_rand($quotes)];
                         -----------------------------
                     </p>
                     <p class="typing-text">
-                        I am currently learning Golang, Zig, and Typescript.
+                        I am currently learning Golang, Rust, Zig, and Typescript.
                     </p>
                     <p class="typing-text">
                         -----------------------------
