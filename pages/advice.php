@@ -55,14 +55,14 @@ $dubstep_advice = [
                 <ul id="coding-advice" class="styled-list"></ul>
 
                 <div class="section-divider">
-                    <span>More Wisdom</span>
+                    <span>🫶🏻</span>
                 </div>
 
                 <h1 class="animated-heading">Cooking Advice</h1>
                 <ul id="cooking-advice" class="styled-list"></ul>
 
                 <div class="section-divider">
-                    <span>Beat Drops</span>
+                    <span>👍🏼</span>
                 </div>
 
                 <h1 class="animated-heading">Dubstep Music Advice</h1>
