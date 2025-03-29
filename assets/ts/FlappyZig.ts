@@ -23,20 +23,11 @@ const CONSTANTS = {
     MAX_SPEED_MULTIPLIER: 2.5,
     BULLET_SIZE_INCREASE: 2,
     MAX_BULLET_SIZE: 55, 
-    GRAVITY: 0.5,
-    JUMP_FORCE: -9.0,
-    WALL_SPEED: 15,
-    WALL_SPACING: 900,
-    WALL_GAP: 300,
-    ZIG_WIDTH: 45,
-    ZIG_HEIGHT: 45,
-    BULLET_SIZE: 45,
-    ENEMY_SIZE: 35,
-    ENEMY_SPEED: 17,
-    ENEMY_BOB_AMPLITUDE: 100,
-    BULLET_AUTO_AIM_RANGE: 1000.0,
-    BULLET_SPEED_TOTAL: 50.0,
-    TRAIL_LINE_WIDTH: 8,
+    MIN_SCALE_FACTOR: 0.6,
+    IS_MOBILE: false,
+    MOBILE_REF_WIDTH: 800,
+    DESKTOP_REF_WIDTH: 1920,
+    UI_SCALE_FACTOR: 1,
     SCREEN_WIDTH: 0,
     SCREEN_HEIGHT: 0,
     SCALE_FACTOR: 1 
@@ -109,7 +100,14 @@ class Game {
     constructor() {
         this.canvas = document.createElement('canvas');
         this.setupCanvas();
-        document.body.appendChild(this.canvas);
+        
+        const canvasContainer = document.querySelector('.canvas') || document.body;
+        if (canvasContainer.querySelector('canvas')) {
+            canvasContainer.replaceChild(this.canvas, canvasContainer.querySelector('canvas'));
+        } else {
+            canvasContainer.appendChild(this.canvas);
+        }
+        
         this.ctx = this.canvas.getContext('2d')!;
         
         this.zig = {
@@ -164,20 +162,37 @@ class Game {
         this.speedMultiplier = 1.0;
         this.currentBulletSize = CONSTANTS.BULLET_SIZE;
         requestAnimationFrame(this.gameLoop.bind(this));
+
+        if (!document.querySelector('meta[name="viewport"]')) {
+            const meta = document.createElement('meta');
+            meta.name = 'viewport';
+            meta.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no';
+            document.head.appendChild(meta);
+        }
+        
+        document.body.style.overflow = 'hidden';
+        document.body.style.position = 'fixed';
+        document.body.style.width = '100%';
+        document.body.style.height = '100%';
     }
 
     setupCanvas(): void {
+        CONSTANTS.IS_MOBILE = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) 
+            || (window.innerWidth <= 768);
+        
         const targetAspectRatio = 16 / 9; 
         let width, height;
         
         const screenWidth = window.innerWidth;
         const screenHeight = window.innerHeight;
         
+        const screenUsage = CONSTANTS.IS_MOBILE ? 0.98 : 0.95; 
+        
         if (screenWidth / screenHeight > targetAspectRatio) {
-            height = screenHeight * 0.9; 
+            height = screenHeight * screenUsage; 
             width = height * targetAspectRatio;
         } else {
-            width = screenWidth * 0.9; 
+            width = screenWidth * screenUsage; 
             height = width / targetAspectRatio;
         }
         
@@ -185,12 +200,20 @@ class Game {
         this.canvas.height = height;
         this.canvas.style.display = 'block';
         this.canvas.style.margin = 'auto';
+        this.canvas.className = 'game-canvas';
         
         CONSTANTS.SCREEN_WIDTH = width;
         CONSTANTS.SCREEN_HEIGHT = height;
         
-        const referenceWidth = 1920;
-        CONSTANTS.SCALE_FACTOR = width / referenceWidth;
+        const referenceWidth = CONSTANTS.IS_MOBILE ? CONSTANTS.MOBILE_REF_WIDTH : CONSTANTS.DESKTOP_REF_WIDTH;
+        let scaleFactor = width / referenceWidth;
+        
+        scaleFactor = Math.max(scaleFactor, CONSTANTS.IS_MOBILE ? 0.7 : CONSTANTS.MIN_SCALE_FACTOR);
+        CONSTANTS.SCALE_FACTOR = scaleFactor;
+        
+        CONSTANTS.UI_SCALE_FACTOR = CONSTANTS.IS_MOBILE ? 
+            Math.max(1.3, scaleFactor * 1.6) : 
+            scaleFactor;
         
         CONSTANTS.GRAVITY = CONSTANTS.BASE_GRAVITY * CONSTANTS.SCALE_FACTOR;
         CONSTANTS.JUMP_FORCE = CONSTANTS.BASE_JUMP_FORCE * CONSTANTS.SCALE_FACTOR;
@@ -228,6 +251,12 @@ class Game {
             }
         });
 
+        document.addEventListener('touchmove', (e) => {
+            if (e.target === this.canvas) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+
         this.canvas.addEventListener('touchstart', (e) => {
             e.preventDefault();
             const touch = e.touches[0];
@@ -241,6 +270,21 @@ class Game {
             } else if (!this.gameOver) {
                 this.shoot();
             }
+        });
+
+        let lastTap = 0;
+        this.canvas.addEventListener('touchend', (e) => {
+            const curTime = new Date().getTime();
+            const tapLen = curTime - lastTap;
+            if (tapLen < 300 && tapLen > 0 && !this.gameOver) {
+                this.shoot();
+                e.preventDefault();
+            }
+            lastTap = curTime;
+        });
+
+        window.addEventListener('orientationchange', () => {
+            setTimeout(() => this.setupCanvas(), 200);
         });
     }
 
@@ -690,27 +734,77 @@ class Game {
     }
 
     drawUI(): void {
-        const fontSize = Math.max(16, Math.round(20 * CONSTANTS.SCALE_FACTOR));
+        const fontSize = Math.max(16, Math.round(20 * CONSTANTS.UI_SCALE_FACTOR));
+        const smallFontSize = Math.max(14, Math.round(16 * CONSTANTS.UI_SCALE_FACTOR));
         
         this.ctx.fillStyle = 'white';
-        this.ctx.font = `${fontSize}px Arial`;
+        this.ctx.shadowColor = 'rgba(0, 0, 0, 0.7)';
+        this.ctx.shadowBlur = 4;
+        this.ctx.shadowOffsetX = 2;
+        this.ctx.shadowOffsetY = 2;
         
         if (this.gameOver) {
-            this.ctx.fillText(`Game Over! Score: ${this.score}`, 10, 30 * CONSTANTS.SCALE_FACTOR);
-            this.ctx.fillText('High Scores:', 10, 60 * CONSTANTS.SCALE_FACTOR);
+            this.ctx.font = `bold ${fontSize}px Arial`;
+            
+            const gameOverText = `Game Over! Score: ${this.score}`;
+            const textMetrics = this.ctx.measureText(gameOverText);
+            const textX = (CONSTANTS.SCREEN_WIDTH - textMetrics.width) / 2;
+            
+            this.ctx.fillText(gameOverText, textX, 50 * CONSTANTS.SCALE_FACTOR);
+            this.ctx.fillText('High Scores:', 10, 100 * CONSTANTS.SCALE_FACTOR);
+            
             this.highScores.forEach((score, i) => {
-                this.ctx.fillText(`${i + 1}. ${score}`, 10, (90 + i * 30) * CONSTANTS.SCALE_FACTOR);
+                this.ctx.fillText(`${i + 1}. ${score}`, 10, (140 + i * 30) * CONSTANTS.SCALE_FACTOR);
             });
+            
             if (this.canReset) {
-                this.ctx.fillText('Tap or Press SPACE to restart', 10, (90 + this.highScores.length * 30) * CONSTANTS.SCALE_FACTOR);
+                const resetText = CONSTANTS.IS_MOBILE ? 'Tap to restart' : 'Press SPACE to restart';
+                const resetTextMetrics = this.ctx.measureText(resetText);
+                const resetTextX = (CONSTANTS.SCREEN_WIDTH - resetTextMetrics.width) / 2;
+                
+                this.ctx.fillText(resetText, resetTextX, CONSTANTS.SCREEN_HEIGHT - 50 * CONSTANTS.SCALE_FACTOR);
             }
         } else {
+            this.ctx.font = `bold ${fontSize}px Arial`;
             this.ctx.fillText(`Score: ${this.score}`, 10, 30 * CONSTANTS.SCALE_FACTOR);
+            
             if (this.highScores.length > 0) {
-                const highScoreX = Math.min(200 * CONSTANTS.SCALE_FACTOR, CONSTANTS.SCREEN_WIDTH - 150);
-                this.ctx.fillText(`High Score: ${this.highScores[0]}`, highScoreX, 30 * CONSTANTS.SCALE_FACTOR);
+                const highScoreText = `High: ${this.highScores[0]}`;
+                const metrics = this.ctx.measureText(highScoreText);
+                this.ctx.fillText(highScoreText, CONSTANTS.SCREEN_WIDTH - metrics.width - 10, 30 * CONSTANTS.SCALE_FACTOR);
+            }
+            
+            if (CONSTANTS.IS_MOBILE && !localStorage.getItem('controlsShown') && this.score < 2) {
+                this.ctx.font = `${smallFontSize}px Arial`;
+                this.ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+                
+                const controlsHint = 'Left: Jump | Right: Shoot | Double-tap: Shoot';
+                const hintMetrics = this.ctx.measureText(controlsHint);
+                const hintX = (CONSTANTS.SCREEN_WIDTH - hintMetrics.width) / 2;
+                
+                this.ctx.fillRect(
+                    hintX - 10, 
+                    CONSTANTS.SCREEN_HEIGHT - 40 * CONSTANTS.SCALE_FACTOR - 10, 
+                    hintMetrics.width + 20, 
+                    30 * CONSTANTS.SCALE_FACTOR
+                );
+                
+                this.ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
+                this.ctx.fillText(
+                    controlsHint, 
+                    hintX, 
+                    CONSTANTS.SCREEN_HEIGHT - 20 * CONSTANTS.SCALE_FACTOR
+                );
+                
+                if (this.score >= 1) {
+                    localStorage.setItem('controlsShown', 'true');
+                }
             }
         }
+        
+        this.ctx.shadowBlur = 0;
+        this.ctx.shadowOffsetX = 0;
+        this.ctx.shadowOffsetY = 0;
     }
 
     checkWallCollision(wall: Wall): boolean {

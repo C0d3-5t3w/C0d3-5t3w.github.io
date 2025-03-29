@@ -112,7 +112,6 @@ header("Expires: Sat, 26 Jul 1997 05:00:00 GMT");
             const screenWidth = window.innerWidth;
             const screenHeight = window.innerHeight;
             
-            // Add new controls functionality
             const sizeSlider = document.getElementById('particle-size');
             const speedSlider = document.getElementById('particle-speed');
             const addButton = document.getElementById('add-particles');
