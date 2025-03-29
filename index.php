@@ -233,7 +233,7 @@ $random_quote = $quotes[array_rand($quotes)];
                         -----------------------------
                     </p>
                     <p class="typing-text">
-                        My favorite food is Thai.
+                        My favorite food is Thai and Hispanic.
                     </p>
                     <p class="typing-text">
                         -----------------------------
