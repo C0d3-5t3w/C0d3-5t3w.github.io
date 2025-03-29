@@ -2,6 +2,26 @@
 header("Cache-Control: no-cache, must-revalidate");
 header("Expires: Sat, 26 Jul 1997 05:00:00 GMT");
 
+session_start();
+
+if (!isset($_SESSION['visit_count'])) {
+    $_SESSION['visit_count'] = 1;
+} else {
+    $_SESSION['visit_count']++;
+}
+
+$current_date = date("F j, Y");
+$current_time = date("g:i a");
+
+$hour = date('H');
+if ($hour < 12) {
+    $greeting = "Good morning";
+} elseif ($hour < 18) {
+    $greeting = "Good afternoon";
+} else {
+    $greeting = "Good evening";
+}
+
 $quotes = [
     "Don't die.",
     "Code is like music. It has rhythm, structure, and harmony.",
@@ -147,6 +167,17 @@ $random_quote = $quotes[array_rand($quotes)];
             .typing-text.visible {
                 opacity: 1;
             }
+
+            .visit-counter {
+                font-size: 0.9em;
+                margin-top: 5px;
+                color: var(--primary-color);
+                opacity: 0.8;
+            }
+            .greeting {
+                font-weight: bold;
+                margin-bottom: 10px;
+            }
         </style>
     </head>
     <body>
@@ -155,9 +186,27 @@ $random_quote = $quotes[array_rand($quotes)];
             <h1>
                 C0D3-5T3W
             </h1>
+            
+            <div class="date-time">
+                <div class="greeting"><?php echo $greeting; ?>, visitor!</div>
+                <div>Today is <?php echo $current_date; ?></div>
+                <div>Current time: <?php echo $current_time; ?></div>
+                <?php if (!empty($temperature)): ?>
+                <div>Weather: <?php echo $weather; ?> (<?php echo $temperature; ?>)</div>
+                <?php endif; ?>
+                <div class="visit-counter">You've visited this page <?php echo $_SESSION['visit_count']; ?> time<?php echo $_SESSION['visit_count'] > 1 ? 's' : ''; ?> this session</div>
+            </div>
+            
             <h2>
                 Welcome!
             </h2>
+            
+            <?php if ($hour >= 22 || $hour < 6): ?>
+            <div style="margin: 10px 0; padding: 10px; background-color: #333; border-radius: 5px;">
+                <p>🌙 You're up late! Don't forget to rest too.</p>
+            </div>
+            <?php endif; ?>
+            
             <h3 class="about-container">
                 <div id="typing-title"></div>
                 <div id="typing-content" class="typing-content">
@@ -219,6 +268,9 @@ $random_quote = $quotes[array_rand($quotes)];
                 <h1>Random quote:</h1>
                 <div id="quote-text">
                     <h3><p id="quote-content"><?php echo $random_quote; ?></p></h3>
+                    <form method="post" style="text-align: right; margin-top: 5px;">
+                        <button type="submit" name="new_quote" style="background: transparent; border: 1px solid var(--primary-color); color: var(--primary-color); cursor: pointer; padding: 5px 10px; border-radius: 5px;">New Quote</button>
+                    </form>
                 </div>
             </div>
         </div>
