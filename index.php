@@ -186,7 +186,7 @@ $random_quote = $quotes[array_rand($quotes)];
             <h1>
                 C0D3-5T3W
             </h1>
-            
+            <!--
             <div class="date-time">
                 <div class="greeting"><?php echo $greeting; ?>, visitor!</div>
                 <div>Today is <?php echo $current_date; ?></div>
@@ -196,17 +196,17 @@ $random_quote = $quotes[array_rand($quotes)];
                 <?php endif; ?>
                 <div class="visit-counter">You've visited this page <?php echo $_SESSION['visit_count']; ?> time<?php echo $_SESSION['visit_count'] > 1 ? 's' : ''; ?> this session</div>
             </div>
-            
+            -->
             <h2>
                 Welcome!
             </h2>
-            
+            <!--             
             <?php if ($hour >= 22 || $hour < 6): ?>
             <div style="margin: 10px 0; padding: 10px; background-color: #333; border-radius: 5px;">
                 <p>🌙 You're up late! Don't forget to rest too.</p>
             </div>
             <?php endif; ?>
-            
+            -->
             <h3 class="about-container">
                 <div id="typing-title"></div>
                 <div id="typing-content" class="typing-content">
@@ -268,9 +268,11 @@ $random_quote = $quotes[array_rand($quotes)];
                 <h1>Random quote:</h1>
                 <div id="quote-text">
                     <h3><p id="quote-content"><?php echo $random_quote; ?></p></h3>
+                    <!--
                     <form method="post" style="text-align: right; margin-top: 5px;">
                         <button type="submit" name="new_quote" style="background: transparent; border: 1px solid var(--primary-color); color: var(--primary-color); cursor: pointer; padding: 5px 10px; border-radius: 5px;">New Quote</button>
                     </form>
+                    -->
                 </div>
             </div>
         </div>
